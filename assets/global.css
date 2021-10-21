@@ -1,0 +1,30 @@
+@import url(~/assets/fonts.css);
+@import url(~/assets/global.scss);
+
+html {
+    color: white;
+    background: #202020;
+    font-family: Montserrat;
+    word-spacing: 1px;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+  }
+.app, .header, .footer {
+    width: 100%;
+    margin: 0 auto;
+}
+a {
+  text-decoration: none;
+}
+button {
+  cursor: pointer;
+}
+/* .fade-enter-active, .fade-leave-active {
+  transition: opacity 2s;
+}
+.fade-enter, .fade-leave-to {
+  transition: 1s;
+  opacity: 0;
+} */
