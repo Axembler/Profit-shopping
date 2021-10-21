@@ -1,7 +1,6 @@
 <template>
       <div class="main-index">
-            <!-- <transition-group class="top-index" tag="div" name="fade" mode="in-out"> -->
-            <div class="top-index">
+            <div :class="['top-index', {'item-fourth': items.length !== 2}]">
                   <div class="item" v-for="(item, index) in items" :key="item.id">
                         <span class="item-label">
                               {{index + 1}}
@@ -9,11 +8,11 @@
                         <div class="amounts">
                               <div class="amount-padding">
                                     <label>Volume</label>
-                                    <input v-model="item.volume" placeholder="liters" min="0" step="0.1" type="number" required />
+                                    <input v-model="item.volume" placeholder="liters" min="0.1" step="0.1" type="number" required />
                               </div>
                               <div>
                                     <label>Price</label>
-                                    <input v-model="item.price" placeholder="rubles" min="0" step="5" type="number" required />
+                                    <input v-model="item.price" placeholder="rubles" min="1" step="5" type="number" required />
                               </div>
                         </div>
                         <button class="remove-button" @click="remove(index), division()" v-if="items.length > 2">
@@ -24,11 +23,21 @@
                         ADD
                   </button> 
             </div>
-            <!-- </transition-group> -->
             <div class="bottom-index">
                   <button class="calc-button" @click="division()">CALCULATE</button>
                   <label class="button-label-first">profit</label>
-                  <label class="button-label-second" v-for="(profit, index) in profits" :key="index">{{profits[index]}}%</label>
+                  <div :class="['top-index', {'item-fourth': items.length !== 2}]">
+                        <label :class="['button-label-second', {'colorRed': profit === 0},
+                        {'colorLightGreen': profit > 0 && profit < 25},
+                        {'colorGreen': profit >= 25},
+                        {'colorDarkGreen': profit >= 50},
+                        {'colorViolet': profit >= 90}
+                        ]"
+                        v-for="(profit, index) in profits" :key="index">
+                              {{profits[index]}}%
+                              <span class="colorRed" v-if="profit === 0">*</span>
+                        </label>
+                  </div>
             </div>
       </div>
 </template>
@@ -58,21 +67,30 @@ export default {
             division() {
                   this.results = []
                   this.profits = []
+                  let no = false
                   let result = 1
-                  for (let i = 0; i < this.items.length; i++) {
-                        result = this.items[i].volume
-                        for (let j = 0; j < this.items.length; j++) {
-                              let n = [i]
-                              if (!n.includes(j)) {
-                                    result *= this.items[j].price
-                              }
-                              n.push(j)
+                  for (let n = 0; n < this.items.length; n++) {
+                        if (this.items[n].volume === null || this.items[n].price === null || this.items[n].volume === ''||
+                        this.items[n].price === '' || this.items[n].volume <= '0' || this.items[n].price <= '0') {
+                              no = true
                         }
-                        this.results.push(result)
                   }
-                  this.min = this.results.reduce((acc, curr) => acc < curr ? acc : curr)
-                  for (let c = 0; c < this.items.length; c++) {
-                        this.profits.push(Math.round(100 * (this.results[c] / this.min) - 100))
+                  if (!no) {
+                        for (let i = 0; i < this.items.length; i++) {
+                              result = this.items[i].volume
+                              for (let j = 0; j < this.items.length; j++) {
+                                    let n = [i]
+                                    if (!n.includes(j)) {
+                                          result *= this.items[j].price
+                                    }
+                                    n.push(j)
+                              }
+                              this.results.push(result)
+                        }
+                        this.min = this.results.reduce((acc, curr) => acc < curr ? acc : curr)
+                        for (let c = 0; c < this.items.length; c++) {
+                              this.profits.push(Math.round(100 * (this.results[c] / this.min) - 100))
+                        }
                   }
             },
             add() {
@@ -98,19 +116,25 @@ export default {
 .main-index {
       display: flex;
       flex-direction: column;
+      min-height: calc(100vh - 8vh - 12vh);
 }
 .top-index {
       display: grid;
       gap: 20px;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
+      width: 100%;
 }
 .item {
       display: flex;
       position: relative;
       flex-direction: column;
       width: 100%;
+      height: 100%;
       background: rgba(255, 255, 255, .05);
       padding: 30px;
+}
+.top-index.item-fourth {
+      grid-template-columns: repeat(4, 1fr);
 }
 .add {
       display: flex;
@@ -120,7 +144,6 @@ export default {
       font-family: Vidaloka;
       font-size: 100px;
       opacity: .13;
-      /* transition: .3; */
       background: url("~/static/images/bg-button-add.png");
       background-size: 10px;
 }
@@ -132,12 +155,12 @@ export default {
       color: #FFFFFF38;
       font-size: 100px;
       line-height: 100px;
-      padding-bottom: 30px;
 }
 .amounts {
       display: flex;
       flex-direction: column;
-      padding: 0 0 30px 60px;
+      align-items: center;
+      padding-bottom: 20px;
 }
 .amounts label {
       font-size: 16px;
@@ -198,8 +221,20 @@ input:focus {
 	text-shadow: 0 0 50px #cc334d;
 }
 .colorGreen{
+      color: #1da74b;
+	text-shadow: 0 0 50px #1da74b;
+}
+.colorLightGreen{
       color: #2aa762;
 	text-shadow: 0 0 50px #2aa762;
+}
+.colorDarkGreen{
+      color: #00CC66;
+	text-shadow: 0 0 50px #00CC66;
+}
+.colorViolet{
+      color: #9900FF;
+	text-shadow: 0 0 50px #9900FF;
 }
 .bottom-index {
       display: flex;
@@ -220,6 +255,10 @@ input:focus {
       letter-spacing: .1em;
 }
 .button-label-second {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
       letter-spacing: .1em;
       font-family: Vidaloka;
       font-size: 100px;
