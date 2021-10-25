@@ -19,20 +19,20 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@/assets/global.css',
-    '@/assets/global.scss'
+    // '@/assets/global.scss'
   ],
 
-  styleResources: {
-    sass: [
-      '@assets/global.sass'
-    ]
-  },
+  // styleResources: {
+  //   sass: [
+  //     '@assets/global.sass'
+  //   ]
+  // },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [ 
-    {
-      src: '~/index.js', mode: 'server'
-    }
+    // {
+    //   src: '@/api/index.js', mode: 'server'
+    // }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -1,4 +1,0 @@
-db.users.insertMany([
-    {name: "null", age: "null"}
-    {name: "1null", age: "1null"}
-])
