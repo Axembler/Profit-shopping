@@ -13,13 +13,16 @@ mongoose.connect(
   .catch(err => console.error(err))
 //ЗОНА БОЕВЫХ ДЕЙСТВИЙ
 
+const user = require('./routes/user')
 
+app.use(user)
 
 //ЗОНА БОЕВЫХ ДЕЙСТВИЙ
-const port = process.env.PORT || 3001
-
 module.exports = app
 
-app.listen(port, () => {
-  console.log(`Сервер доступен по localhost:${port}`)  
-})
+if (require.main === module) {
+  const port = process.env.PORT || 3001
+  app.listen(port, () => {
+    console.log(`'Сервер доступен по localhost:'${port}`)
+  })
+}

@@ -21,7 +21,6 @@ export default {
     '@/assets/global.css',
     // '@/assets/global.scss'
   ],
-
   // styleResources: {
   //   sass: [
   //     '@assets/global.sass'
@@ -44,7 +43,16 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios'
   ],
+
+  axios: {
+    proxy: true
+  },
+  
+  proxy: {
+    '/api': 'http://localhost:3001/'
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

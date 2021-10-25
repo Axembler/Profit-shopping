@@ -1,11 +1,18 @@
 <template>
       <footer>
             <h5>Made by Axembler</h5>
+            <button @click="api()">API</button>
       </footer>
 </template>
 
 <script>
-export default {}
+export default {
+      methods: {
+            api(){
+                  this.$axios.get('http://localhost:3001/user')
+            }
+      }
+}
 </script>
 
 <style scoped>
