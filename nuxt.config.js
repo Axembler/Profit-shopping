@@ -28,10 +28,8 @@ export default {
   // },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [ 
-    // {
-    //   src: '@/api/index.js', mode: 'server'
-    // }
+  plugins: [
+
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -51,9 +49,13 @@ export default {
   },
   
   proxy: {
-    '/api': 'http://localhost:3001/'
+    '/api': 'http://localhost:3000/api/'
   },
 
+  serverMiddleware: [
+    { path: "/api", handler: require("body-parser").json() },
+    { path: '/api', handler: '~/api' }
+  ],
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }

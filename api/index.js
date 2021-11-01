@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const app = express()
 
 app.use(cors())
@@ -11,13 +12,14 @@ mongoose.connect(
 )
   .then(() => console.log('Соединение с БД установлено'))
   .catch(err => console.error(err))
-//ЗОНА БОЕВЫХ ДЕЙСТВИЙ
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const user = require('./routes/user')
 
 app.use(user)
 
-//ЗОНА БОЕВЫХ ДЕЙСТВИЙ
 module.exports = app
 
 if (require.main === module) {

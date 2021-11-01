@@ -1,7 +1,8 @@
 <template>
       <footer>
             <h5>Made by Axembler</h5>
-            <button @click="api()">API</button>
+            <button @click="api()">Добавить</button>
+            <button @click="api2()">Удалить записи</button>
       </footer>
 </template>
 
@@ -9,7 +10,10 @@
 export default {
       methods: {
             api(){
-                  this.$axios.get('http://localhost:3001/user')
+                  this.$axios.get('/api/user')
+            },
+            api2(){
+                  this.$axios.delete('/api/user/delete')
             }
       }
 }
