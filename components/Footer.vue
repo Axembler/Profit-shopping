@@ -3,6 +3,9 @@
             <h5>Made by Axembler</h5>
             <button @click="api()">Добавить</button>
             <button @click="api2()">Удалить записи</button>
+            <button><NuxtLink exact active-class="active" to="/test">Перейти на api</NuxtLink></button>
+            <button><NuxtLink exact active-class="active" to="/">Перейти на главную</NuxtLink></button>
+            <button><NuxtLink exact active-class="active" to="/admin">Перейти на админ. панель</NuxtLink></button>
       </footer>
 </template>
 

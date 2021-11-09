@@ -4,15 +4,6 @@ const router = express.Router();
 const User = require('../models/User');
 
 router.post('/user/post', async (req, res) => {
-  // User.findOne(
-  //   {
-  //     login: req.body.login,
-  //     name: req.body.name
-  //   }
-  // )
-  //   .then((user) => {
-  //     console.log(user)
-  //   })
   try {
     const user = new User({
       name: req.body.name,
@@ -27,11 +18,23 @@ router.post('/user/post', async (req, res) => {
 });
 
 router.delete('/user/delete', async (req, res) => {
-  await User.deleteMany(
-    {
-      login: ''
-    }
-  )
+  await User.deleteMany()
+});
+
+router.get('/user/getLogin', async (req, res) => {
+  console.log(req.query)
+  const findUser = await User.findOne({
+    login: req.query.login
+  })
+  res.status(200).json(findUser);
+});
+
+router.get('/user/getNickname', async (req, res) => {
+  console.log(req.query)
+  const findUser = await User.findOne({
+    name: req.query.nickname
+  })
+  res.status(200).json(findUser);
 });
 
 module.exports = router

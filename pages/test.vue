@@ -1,19 +1,19 @@
 <template>
     <div class="main">
         <div class="form">
-            <label for="login">Логин</label>
+            <label for="login">Login</label>
             <input v-model="form.login" id="login" type="text">
             
-            <label for="password">Пароль</label>
+            <label for="password">Password</label>
             <input v-model="form.password" id="password" type="text">
 
-            <label for="repeat-password">Повтор пароля</label>
+            <label for="repeat-password">Repeat password</label>
             <input v-model="form.repeatPassword" id="repeat-password" type="text">
 
-            <label for="name">Никнейм</label>
+            <label for="name">Nickname</label>
             <input v-model="form.name" id="name" type="text">
         </div>
-        <button @click="registration()">Зарегистрироваться</button>
+        <button @click="registration()">Sign up</button>
     </div>
 </template>
 
@@ -46,9 +46,9 @@ export default {
 <style scoped>
 .main {
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
+    min-height: calc(100vh - 8vh - 12vh);
 }
 .form {
     display: grid;
@@ -62,5 +62,14 @@ input {
     width: 250px;
     height: 30px;
     font-size: 18px;
+    border: 0;
+    border-bottom: 1px solid white;
+    background: rgba(255, 255, 255, .1);
+    color: white;
+}
+button {
+    width: 180px;
+    height: 30px;
+    font-size: 16px;
 }
 </style>

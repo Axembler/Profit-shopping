@@ -208,7 +208,7 @@ input:focus {
       width: 250px;
       height: 60px;
       color: #1D1128;
-      background: #6590E2;
+      background: rgba(104, 101, 247, 0.75);
       border: 0;
       font-size: 26px;
       text-align: center;
