@@ -68,8 +68,14 @@ input {
     color: white;
 }
 button {
-    width: 180px;
-    height: 30px;
-    font-size: 16px;
+    width: 160px;
+    height: 40px;
+    color: #1D1128;
+    background: rgba(0, 220, 130, 0.7);
+    border: 0;
+    font-size: 18px;
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: .1em;
 }
 </style>
