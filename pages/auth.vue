@@ -2,43 +2,54 @@
     <div class="main">
         <div class="form">
             <label for="login">Login</label>
-            <input v-model="form_register.login" id="login" type="text">
+            <input v-model="form_auth.login" id="login" type="text">
             
             <label for="password">Password</label>
-            <input v-model="form_register.password" id="password" type="text">
-
-            <label for="repeat-password">Repeat password</label>
-            <input v-model="form_register.repeatPassword" id="repeat-password" type="text">
-
-            <label for="name">Nickname</label>
-            <input v-model="form_register.name" id="name" type="text">
+            <input v-model="form_auth.password" id="password" type="text">
         </div>
-        <button @click="registration">Sign up</button>
+        <button @click="auth">Sign in</button>
+        <button @click="test">Test</button>
+        {{ user }}
     </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
+    middleware: 'auth',
+    
     data() {
         return {
-            form_register: {
+            findAuth: null,
+
+            form_auth: {
                 login: '',
-                password: '',
-                repeatPassword: '',
-                name: '',
-                role: ''
+                password: ''
             }
         }
     },
+    computed: {
+        ...mapGetters({
+            user: 'auth/getUser'
+        })
+    },
     methods: {
-        registration(){
-            this.$axios.post('/api/user/post', this.form_register)
-            this.form_register = {
-                login: '',
-                password: '',
-                repeatPassword: '',
-                name: ''
+        auth() {
+            this.findAuth = null
+            if (this.form_auth.login !== '' && this.form_auth.password !== '') {
+                this.$axios.get('/api/user/getAuth', {params: this.form_auth})
+                .then((res) => {
+                    this.$store.commit('auth/setUser', res.data)
+                })
+                this.form_auth = {
+                    login: '',
+                    password: ''
+                }
             }
+        },
+        test() {
+            console.log(this.$store.state.user)
         }
     }
 }

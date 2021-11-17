@@ -43,12 +43,24 @@
                         <input v-model="form_delete.name" id="delete_nickname" type="text">
                     </div>
                 </div>
+                <div class="action-place-form">
+                    <span>Give out VIP</span>
+                    <div>
+                        <label for="vip_login">Login</label>
+                        <input v-model="form_vip.login" id="vip_login" type="text">
+                    </div>
+                    <div>
+                        <label for="vip_name">Nickname</label>
+                        <input v-model="form_vip.name" id="vip_name" type="text">
+                    </div>
+                </div>
             </div>
             <div class="buttons">
-                <button @click="find_user_login()" class="perform">PERFORM</button>
-                <button @click="find_user_name()" class="perform">PERFORM</button>
-                <button @click="update_user()" class="perform">PERFORM</button>
-                <button @click="delete_user()" class="perform">PERFORM</button>
+                <button @click="find_user_login" class="perform">PERFORM</button>
+                <button @click="find_user_name" class="perform">PERFORM</button>
+                <button @click="update_user" class="perform">PERFORM</button>
+                <button @click="delete_user" class="perform">PERFORM</button>
+                <button @click="vip_user" class="perform">PERFORM</button>
             </div>
             <div class="output-place">
                 <span>OUTPUT</span>
@@ -56,6 +68,7 @@
                  <!-- ПОИСК ПОЛЬЗОВАТЕЛЯ -->
                 <ul v-if="findUserLogin !== null" class="output">
                     <li>id: {{findUserLogin._id}}</li> 
+                    <li>role: {{findUserLogin.role}}</li>
                     <li>nickname: {{findUserLogin.name}}</li> 
                     <li>login: {{findUserLogin.login}}</li>
                     <li>password: {{findUserLogin.password}}</li>
@@ -63,6 +76,7 @@
 
                 <ul v-if="findUserName !== null" class="output">
                     <li>id: {{findUserName._id}}</li> 
+                    <li>role: {{findUserName.role}}</li>
                     <li>nickname: {{findUserName.name}}</li> 
                     <li>login: {{findUserName.login}}</li>
                     <li>password: {{findUserName.password}}</li>
@@ -75,6 +89,10 @@
                 <!-- ОБНОВЛЕНИЕ ПОЛЬЗОВАТЕЛЯ -->
                 <p v-if="updateUser.modifiedCount == 1">Имя пользователя изменено!</p>
                 <p v-if="updateUser.modifiedCount == 0">Пользователь с никнеймом не найден</p>
+
+                <!-- ВЫДАЧА ВИП -->
+                <p v-if="vipUser.modifiedCount == 1">VIP выдан!</p>
+                <p v-if="vipUser.modifiedCount == 0">Пользователь не найден или он уже имеет VIP</p>
             </div>
         </div>  
     </div>
@@ -86,8 +104,10 @@ export default {
         return {
             findUserLogin: null,
             findUserName: null,
+            vipUser: 0,
             deleteUser: 0,
             updateUser: 0,
+            
             form_find_login: {
                 login: ''
             },
@@ -102,6 +122,12 @@ export default {
                 oldName: '',
                 newName: '',
                 repeatNewName: ''
+            },
+            form_vip: {
+                login: '',
+                name: '',
+                oldRole: 'User',
+                newRole: 'VIP'
             }
         }
     },
@@ -111,6 +137,9 @@ export default {
             if (this.form_find_login.login !== '') {
                 this.$axios.get('/api/user/getLogin', {params: this.form_find_login})
                 .then((res) => this.findUserLogin = res.data)
+                this.form_find_login = {
+                    login: ''
+                }
             }
         },
         find_user_name() {
@@ -118,18 +147,21 @@ export default {
             if (this.form_find_name.name !== '') {
                 this.$axios.get('/api/user/getName', {params: this.form_find_name})
                 .then((res) => this.findUserName = res.data)
+                this.form_find_name = {
+                    name: ''
+                }
             }
         },
         update_user() {
             this.updateUser = ''
             if (this.form_update.newName == this.form_update.repeatNewName && this.form_update.newName !== '') {
-                this.$axios.put('/api/user/updateUser', this.form_update)
-                .then((res) => this.updateUser = res.data)
                 this.form_update = {
                     oldName: '',
                     newName: '',
                     repeatNewName: ''
                 }
+                this.$axios.put('/api/user/updateUser', this.form_update)
+                .then((res) => this.updateUser = res.data)
             }
         },
         delete_user() {
@@ -138,6 +170,17 @@ export default {
                 this.$axios.delete('/api/user/deleteUser', {params: this.form_delete})
                 .then((res) => this.deleteUser = res.data)
                 this.form_delete = {
+                    login: '',
+                    name: ''
+                }
+            }
+        },
+        vip_user() {
+            this.vipUser = ''
+            if (this.form_vip.login !== '' && this.form_vip.name !== '') {
+                this.$axios.put('/api/user/vipUser', this.form_vip)
+                .then((res) => this.vipUser = res.data)
+                this.form_vip = {
                     login: '',
                     name: ''
                 }

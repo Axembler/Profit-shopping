@@ -44,6 +44,10 @@ export default {
     '@nuxtjs/axios'
   ],
 
+  middleware: [
+    'auth'
+  ],
+  
   axios: {
     proxy: true
   },

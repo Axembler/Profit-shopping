@@ -1,7 +1,8 @@
 <template>
       <footer>
             <h5>Made by Axembler</h5>
-            <button><NuxtLink exact active-class="active" to="/register">Перейти на api</NuxtLink></button>
+            <button><NuxtLink exact active-class="active" to="/register">Перейти на регистрацию</NuxtLink></button>
+            <button><NuxtLink exact active-class="active" to="/auth">Перейти на авторизацию</NuxtLink></button>
             <button><NuxtLink exact active-class="active" to="/">Перейти на главную</NuxtLink></button>
             <button><NuxtLink exact active-class="active" to="/admin">Перейти на админ. панель</NuxtLink></button>
       </footer>
