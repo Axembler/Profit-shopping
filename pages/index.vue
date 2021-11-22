@@ -15,9 +15,7 @@
                                     <input v-model="item.price" placeholder="rubles" min="1" step="5" type="number" required />
                               </div>
                         </div>
-                        <button class="remove-button" @click="remove(index), division()" v-if="items.length > 2">
-                              <img src="~/static/images/cancel.png">
-                        </button>
+                        <img class="remove-button" src="~/static/images/close.png" @click="remove(index), division()" v-if="items.length > 2">
                   </div>
                   <button class="add" @click="add()" v-if="items.length < 4" key="beliberda">
                         ADD
@@ -109,164 +107,147 @@ export default {
 }
 </script>
 
-<style scoped>
-* {
-      color: white;
-}
-.main-index {
-      display: flex;
-      flex-direction: column;
-      min-height: calc(100vh - 8vh - 12vh);
-}
-.top-index {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: repeat(3, 1fr);
-      width: 100%;
-}
-.item {
-      display: flex;
-      position: relative;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, .05);
-      padding: 30px;
-}
-.top-index.item-fourth {
-      grid-template-columns: repeat(4, 1fr);
-}
-.add {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 0;
-      font-family: Vidaloka;
-      font-size: 100px;
-      opacity: .13;
-      background: url("~/static/images/bg-button-add.png");
-      background-size: 10px;
-}
-.add:hover {
-      opacity: .4;
-}
-.item-label {
-      font-family: Vidaloka;
-      color: #FFFFFF38;
-      font-size: 100px;
-      line-height: 100px;
-}
-.amounts {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-bottom: 20px;
-}
-.amounts label {
-      font-size: 16px;
-      font-weight: 300;
-      letter-spacing: .05em;
-      padding-bottom: 5px;
-}
-.amounts > div {
-    display: flex;
-    flex-direction: column;
-}
-.amount-padding {
-      padding-bottom: 16px;
-}
-input {
-      width: 140px;
-      height: 40px;
-      font-size: 18px;
-      text-align: center;
-      border: 0;
-      border-bottom: 1px solid white;
-      background: rgba(255, 255, 255, .1);
-}
-input:focus {
-      color: #5de63b;
-}
-.remove-button {
-      display: flex;
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      align-items: center;
-      justify-content: center;
-      opacity: .4;
-      width: 25px;
-      height: 25px;
-      color: #1D1128;
-      border: 0;
-      padding: 0;
-}
-.remove-button > img {
-      width: 18px;
-}
-.calc-button {
-      width: 250px;
-      height: 60px;
-      color: #1D1128;
-      background: rgba(104, 101, 247, 0.75);
-      border: 0;
-      font-size: 26px;
-      text-align: center;
-      font-weight: 500;
-      font-family: Montserrat;
-      letter-spacing: .1em;
-}
-.colorRed{
-      color: #cc334d;
-	text-shadow: 0 0 50px #cc334d;
-}
-.colorGreen{
-      color: #1da74b;
-	text-shadow: 0 0 50px #1da74b;
-}
-.colorLightGreen{
-      color: #2aa762;
-	text-shadow: 0 0 50px #2aa762;
-}
-.colorDarkGreen{
-      color: #00CC66;
-	text-shadow: 0 0 50px #00CC66;
-}
-.colorViolet{
-      color: #9900FF;
-	text-shadow: 0 0 50px #9900FF;
-}
-.bottom-index {
-      display: flex;
-      flex-direction: column;
-      height: 30%;
-      padding-top: 10px;
-      width: 100%;
-      align-items: center;
-}
-.bottom-index > button {
-      margin-top: 15px;
-      margin-bottom: 40px;
-}
-.button-label-first {
-      font-size: 24px;
-      padding-top: 20px;
-      font-weight: 300;
-      letter-spacing: .1em;
-}
-.button-label-second {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      letter-spacing: .1em;
-      font-family: Vidaloka;
-      font-size: 100px;
-}
+<style lang="sass" scoped>
+* 
+	color: white
+      
+.main-index 
+	display: flex 
+	flex-direction: column 
+	min-height: calc(100vh - 8vh - 12vh)
 
-@media screen and (max-width: 768px){
-      .top-index {
-            grid-template-columns: unset;
-      }
-}
+.top-index 
+	display: grid 
+	gap: 20px 
+	grid-template-columns: repeat(3, 1fr) 
+	width: 100% 
+	&.item-fourth 
+		grid-template-columns: repeat(4, 1fr)
+
+.item 
+	display: flex 
+	position: relative 
+	flex-direction: column 
+	width: 100% 
+	height: 100% 
+	background: rgba(255, 255, 255, .05) 
+	padding: 30px
+
+.add 
+	display: flex 
+	align-items: center 
+	justify-content: center 
+	border: 0 
+	font-family: Vidaloka 
+	font-size: 100px 
+	opacity: .13 
+	background: url("~/static/images/bg-button-add.png") 
+	background-size: 10px 
+	&:hover 
+		opacity: .4
+
+.item-label 
+	font-family: Vidaloka 
+	color: #FFFFFF38 
+	font-size: 100px 
+	line-height: 100px
+
+.amounts 
+	display: flex 
+	flex-direction: column 
+	align-items: center 
+	padding-bottom: 20px 
+	label 
+		font-size: 16px 
+		font-weight: 300 
+		letter-spacing: .05em 
+		padding-bottom: 5px 
+	& > div 
+		display: flex 
+		flex-direction: column
+
+.amount-padding 
+	padding-bottom: 16px
+
+input 
+	width: 140px 
+	height: 40px 
+	font-size: 18px 
+	text-align: center 
+	border: 0 
+	border-bottom: 1px solid white 
+	background: rgba(255, 255, 255, .1) 
+	&:focus 
+		color: #5de63b
+
+.remove-button 
+	display: flex 
+	position: absolute 
+	top: 20px 
+	right: 20px 
+	cursor: pointer 
+	opacity: 0.55 
+	width: 36px
+
+.calc-button 
+	width: 250px 
+	height: 60px 
+	color: #1D1128 
+	background: rgba(104, 101, 247, 0.75) 
+	border: 0 
+	font-size: 26px 
+	text-align: center 
+	font-weight: 500 
+	font-family: Montserrat 
+	letter-spacing: .1em
+
+.colorRed 
+	color: #cc334d 
+	text-shadow: 0 0 50px #cc334d
+
+.colorGreen 
+	color: #1da74b 
+	text-shadow: 0 0 50px #1da74b
+
+.colorLightGreen 
+	color: #2aa762 
+	text-shadow: 0 0 50px #2aa762
+
+.colorDarkGreen 
+	color: #00CC66 
+	text-shadow: 0 0 50px #00CC66
+
+.colorViolet 
+	color: #9900FF 
+	text-shadow: 0 0 50px #9900FF
+
+.bottom-index 
+	display: flex 
+	flex-direction: column 
+	height: 30% 
+	padding-top: 10px 
+	width: 100% 
+	align-items: center 
+	& > button 
+		margin-top: 15px 
+		margin-bottom: 40px
+
+.button-label-first
+	font-size: 24px 
+	padding-top: 20px 
+	font-weight: 300 
+	letter-spacing: .1em 
+
+.button-label-second
+	display: flex 
+	justify-content: center 
+	align-items: center 
+	width: 100% 
+	letter-spacing: .1em 
+	font-family: Vidaloka 
+	font-size: 100px
+
+@media (max-width: 768px) 
+	.top-index
+		grid-template-columns: unset 
 </style>

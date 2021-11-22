@@ -18,18 +18,16 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '@/assets/global.css',
-    // '@/assets/global.scss'
+    '@assets/global.sass',
+    '@assets/fonts.sass'
   ],
   // styleResources: {
   //   sass: [
   //     '@assets/global.sass'
   //   ]
   // },
-
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -41,7 +39,8 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/style-resources'
   ],
 
   middleware: [

@@ -36,6 +36,11 @@ router.put('/user/updateUser', async (req, res) => {
   {name: req.body.newName}
   );
   res.status(200).json(updateUser);
+  res.status(200).json({
+    message: updateUser.modifiedCount === 1
+    ? `Никнейм пользователя ${req.query.oldName} изменен на ${req.query.newName}!`
+    : `Пользователь ${req.query.oldName} не найден`
+  });
 });
 
 // УДАЛЕНИЕ ДАННЫХ
@@ -44,7 +49,11 @@ router.delete('/user/deleteUser', async (req, res) => {
     name: req.query.name,
     login: req.query.login
   })
-  res.status(200).json(deleteUser);
+  res.status(200).json({
+    message: deleteUser.deletedCount === 1
+    ? `Пользователь ${req.query.name} удален!`
+    : `Пользователь ${req.query.name} не найден`
+  });
 });
 
 // ПОИСК ДНАНЫХ ПО ЛОГИНУ
@@ -69,7 +78,11 @@ router.put('/user/vipUser', async (req, res) => {
   {role: req.body.oldRole},
   {role: req.body.newRole}
   );
-  res.status(200).json(vipUser);
+  res.status(200).json({
+    message: vipUser.modifiedCount === 1
+    ? `Пользователь получил VIP!`
+    : `Пользователь не найден или уже имеет VIP`
+  });
 });
 
 module.exports = router
