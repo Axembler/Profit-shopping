@@ -43,10 +43,6 @@ export default {
                     .then((res) => {
                         this.$store.commit('auth/setUser', res.data)
                     })
-                    // if (this.user !== null) {
-                    //     console.log('1')
-                    //     this.$router.push('/')
-                    // }
                     this.form_auth = {
                         login: '',
                         password: ''
