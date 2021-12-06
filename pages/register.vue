@@ -1,32 +1,41 @@
 <template>
     <div class="main">
         <div class="form">
-            <label v-if="err_name" class="red" for="name">Nickname {{ err_name }}</label>
+            <p v-show="err_blank" class="err">All fields must be filled in</p>
+            <p v-show="err_repeat" class="err">Passwords must be match</p>
+            
+            <label v-if="err_name" class="err" for="name">Nickname {{ err_name }}</label>
             <label v-else>Nickname</label>
-            <input v-model="form_register.name" id="name" type="text">
+            <input v-model.trim="form_register.name" id="name" type="text">
 
-            <label v-if="err_login" class="red" for="login">Login {{ err_login }}</label>
+            <label v-if="err_login" class="err" for="login">Login {{ err_login }}</label>
             <label v-else>Login</label>
-            <input v-model="form_register.login" id="login" type="text">
+            <input v-model.trim="form_register.login" id="login" type="text">
 
-            <label v-if="err_password" class="red" for="password">Password {{ err_password }}</label>
+            <label v-if="err_password" class="err" for="password">Password {{ err_password }}</label>
             <label v-else>Password</label>
-            <input v-model="form_register.password" id="password" type="text">
+            <input v-model.trim="form_register.password" id="password" type="password">
 
             <label for="repeat-password">Repeat password</label>
-            <input v-model="form_register.repeatPassword" id="repeat-password">
+            <input v-model.trim="form_register.repeatPassword" id="repeat-password">
         </div>
         <button @click="registration">Sign up</button>
+        <button @click="reg">Sign up</button>
     </div>
 </template>
 
 <script>
+import { required, email } from 'vuelidate/lib/validators'
+
 export default {
     data() {
         return {
             err_login: null,
             err_name: null,
             err_password: null,
+
+            err_repeat: false,
+            err_blank: false,
 
             form_register: {
                 login: '',
@@ -39,10 +48,8 @@ export default {
     },
     methods: {
         registration(){
-            if (this.form_register.password == this.form_register.repeatPassword &&
-            this.form_register.password !== '' &&
-            this.form_register.login !== '' &&
-            this.form_register.name !== '') {
+            if (this.form_register.password == this.form_register.repeatPassword && this.form_register.password !== '') {
+                this.err_repeat = false
                 this.$axios.post('/api/user/post', this.form_register)
                 .then(() => {
                     this.form_register = {
@@ -51,18 +58,30 @@ export default {
                         repeatPassword: '',
                         name: ''
                     }
+                    this.err_login = null
+                    this.err_name = null
+                    this.err_password = null
                 })
                 .catch((err) => {
-                    if (err.response.data.err.errors.name) {
-						this.err_name = err.response.data.err.errors.name.message
-					}
-					if (err.response.data.err.errors.login) {
-						this.err_login = err.response.data.err.errors.login.message
-					}
-					if (err.response.data.err.errors.password) {
-						this.err_password = err.response.data.err.errors.password.message
-					}
+                    const error = err.response.data.err.errors
+
+                    if (error.name) {this.err_name = error.name.message}
+                    else {this.err_name = null}
+
+					if (error.login) {this.err_login = error.login.message}
+                    else {this.err_login = null}
+
+					if (error.password) {this.err_password = error.password.message}
+                    else {this.err_password = null}
                 })
+            } else {
+                this.err_repeat = true
+            }
+        },
+        reg() {
+            if (this.$v.$invalid) {
+                this.$v.$touch()
+                return
             }
         }
     }
@@ -101,6 +120,6 @@ button
 	text-align: center
 	font-weight: 500
 	letter-spacing: .1em
-.red
+.err
 	color: $err
 </style>

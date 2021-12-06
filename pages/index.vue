@@ -29,8 +29,7 @@
                         {'colorLightGreen': profit > 0 && profit < 25},
                         {'colorGreen': profit >= 25},
                         {'colorDarkGreen': profit >= 50},
-                        {'colorViolet': profit >= 90}
-                        ]"
+                        {'colorViolet': profit >= 90}]"
                         v-for="(profit, index) in profits" :key="index">
                               {{profits[index]}}%
                               <span class="colorRed" v-if="profit === 0">*</span>

@@ -3,7 +3,6 @@ const { LoaderTargetPlugin } = require('webpack');
 const router = express.Router();
 
 const User = require('../models/User');
-const assert = require('assert')
 
 // РЕГИСТРАЦИЯ
 router.post('/user/post', async (req, res) => {
@@ -11,8 +10,7 @@ router.post('/user/post', async (req, res) => {
     const user = new User({
       name: req.body.name,
       login: req.body.login,
-      password: req.body.password,
-      role: 'User'
+      password: req.body.password
     });
     user.save((err, user) => {
       if (err) {
