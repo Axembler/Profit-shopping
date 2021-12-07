@@ -1,115 +1,115 @@
 <template>
-      <div class="main-index">
-            <div :class="['top-index', {'item-fourth': items.length !== 2}]">
-                  <div class="item" v-for="(item, index) in items" :key="item.id">
-                        <span class="item-label">
-                              {{index + 1}}
-                        </span>
-                        <div class="amounts">
-                              <div class="amount-padding">
-                                    <label>Volume</label>
-                                    <input v-model="item.volume" placeholder="liters" min="0.1" step="0.1" type="number" required />
-                              </div>
-                              <div>
-                                    <label>Price</label>
-                                    <input v-model="item.price" placeholder="rubles" min="1" step="5" type="number" required />
-                              </div>
-                        </div>
-                        <img class="remove-button" src="~/static/images/close.png" @click="remove(index), division()" v-if="items.length > 2">
-                  </div>
-                  <button class="add" @click="add()" v-if="items.length < 4" key="beliberda">
-                        ADD
-                  </button> 
-            </div>
-            <div class="bottom-index">
-                  <button class="calc-button" @click="division()">CALCULATE</button>
-                  <label class="button-label-first">profit</label>
-                  <div :class="['top-index', {'item-fourth': items.length !== 2}]">
-                        <label :class="['button-label-second', {'colorRed': profit === 0},
-                        {'colorLightGreen': profit > 0 && profit < 25},
-                        {'colorGreen': profit >= 25},
-                        {'colorDarkGreen': profit >= 50},
-                        {'colorViolet': profit >= 90}]"
-                        v-for="(profit, index) in profits" :key="index">
-                              {{profits[index]}}%
-                              <span class="colorRed" v-if="profit === 0">*</span>
-                        </label>
-                  </div>
-            </div>
-      </div>
+	  <div class="main-index">
+			<div :class="['top-index', {'item-fourth': items.length !== 2}]">
+				  <div class="item" v-for="(item, index) in items" :key="item.id">
+						<span class="item-label">
+							  {{index + 1}}
+						</span>
+						<div class="amounts">
+							  <div class="amount-padding">
+									<label>Volume</label>
+									<input v-model="item.volume" placeholder="liters" min="0.1" step="0.1" type="number" required />
+							  </div>
+							  <div>
+									<label>Price</label>
+									<input v-model="item.price" placeholder="rubles" min="1" step="5" type="number" required />
+							  </div>
+						</div>
+						<img class="remove-button" src="~/static/images/close.png" @click="remove(index), division()" v-if="items.length > 2">
+				  </div>
+				  <button class="add" @click="add()" v-if="items.length < 4" key="beliberda">
+						ADD
+				  </button> 
+			</div>
+			<div class="bottom-index">
+				  <button class="calc-button" @click="division()">CALCULATE</button>
+				  <label class="button-label-first">profit</label>
+				  <div :class="['top-index', {'item-fourth': items.length !== 2}]">
+						<label :class="['button-label-second', {'colorRed': profit === 0},
+						{'colorLightGreen': profit > 0 && profit < 25},
+						{'colorGreen': profit >= 25},
+						{'colorDarkGreen': profit >= 50},
+						{'colorViolet': profit >= 90}]"
+						v-for="(profit, index) in profits" :key="index">
+							  {{profits[index]}}%
+							  <span class="colorRed" v-if="profit === 0">*</span>
+						</label>
+				  </div>
+			</div>
+	  </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            min: null,
-            results: [],
-            profits: [],
-            items: [
-                {   
-                    id: 1,
-                    volume: null,
-                    price: null
-                },
-                {
-                    id: 2,
-                    volume: null,
-                    price: null
-                }
-            ]
-        }
-    },
-      methods: {
-            division() {
-                  this.results = []
-                  this.profits = []
-                  let no = false
-                  let result = 1
-                  for (let n = 0; n < this.items.length; n++) {
-                        if (this.items[n].volume === null || this.items[n].price === null || this.items[n].volume === ''||
-                        this.items[n].price === '' || this.items[n].volume <= '0' || this.items[n].price <= '0') {
-                              no = true
-                        }
-                  }
-                  if (!no) {
-                        for (let i = 0; i < this.items.length; i++) {
-                              result = this.items[i].volume
-                              for (let j = 0; j < this.items.length; j++) {
-                                    let n = [i]
-                                    if (!n.includes(j)) {
-                                          result *= this.items[j].price
-                                    }
-                                    n.push(j)
-                              }
-                              this.results.push(result)
-                        }
-                        this.min = this.results.reduce((acc, curr) => acc < curr ? acc : curr)
-                        for (let c = 0; c < this.items.length; c++) {
-                              this.profits.push(Math.round(100 * (this.results[c] / this.min) - 100))
-                        }
-                  }
-            },
-            add() {
-                if(this.items.length < 4) {
-                    this.items.push({
-                        id: this.items.reduce((acc, curr) => acc.id > curr.id ? acc : curr).id + 1,
-                        volume: null,
-                        price: null
-                    })
-                }
-            },
-            remove(index) {
-                this.items.splice(index, 1)
-            }
-      }
+	data() {
+		return {
+			min: null,
+			results: [],
+			profits: [],
+			items: [
+				{   
+					id: 1,
+					volume: null,
+					price: null
+				},
+				{
+					id: 2,
+					volume: null,
+					price: null
+				}
+			]
+		}
+	},
+	  methods: {
+			division() {
+				  this.results = []
+				  this.profits = []
+				  let no = false
+				  let result = 1
+				  for (let n = 0; n < this.items.length; n++) {
+						if (this.items[n].volume === null || this.items[n].price === null || this.items[n].volume === ''||
+						this.items[n].price === '' || this.items[n].volume <= '0' || this.items[n].price <= '0') {
+							  no = true
+						}
+				  }
+				  if (!no) {
+						for (let i = 0; i < this.items.length; i++) {
+							  result = this.items[i].volume
+							  for (let j = 0; j < this.items.length; j++) {
+									let n = [i]
+									if (!n.includes(j)) {
+										  result *= this.items[j].price
+									}
+									n.push(j)
+							  }
+							  this.results.push(result)
+						}
+						this.min = this.results.reduce((acc, curr) => acc < curr ? acc : curr)
+						for (let c = 0; c < this.items.length; c++) {
+							  this.profits.push(Math.round(100 * (this.results[c] / this.min) - 100))
+						}
+				  }
+			},
+			add() {
+				if(this.items.length < 4) {
+					this.items.push({
+						id: this.items.reduce((acc, curr) => acc.id > curr.id ? acc : curr).id + 1,
+						volume: null,
+						price: null
+					})
+				}
+			},
+			remove(index) {
+				this.items.splice(index, 1)
+			}
+	  }
 }
 </script>
 
 <style lang="sass" scoped>
 * 
 	color: white
-      
+	  
 .main-index 
 	display: flex 
 	flex-direction: column 

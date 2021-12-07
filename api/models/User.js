@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 //список спец. символов: !"№;%:?*()_=+@#$^&<>,.-
 
 const User = new Schema({
-  name: {
+  nickname: {
     type: String,
     required: [true, 'must be entered'],
     trim: true,
@@ -17,16 +17,15 @@ const User = new Schema({
       message: 'is invalid!'
     }
   },
-  login: {
+  email: {
     type: String,
     required: [true, 'must be entered'],
     trim: true,
     lowercase: true,
     minlength: [4, 'is too short'],
-    maxlength: [24, 'is too long'],
     validate: {
-      validator: function(login) {
-        return /^[0-9a-zA-Z\!\"\№\;\%\:\?\*\(\)\_\=\+\@\#\$\^\&\<\>\,\.\-]+$/.test(login);
+      validator: function(email) {
+        return /^[0-9a-zA-Z\!\"\№\;\%\:\?\*\(\)\_\=\+\@\#\$\^\&\<\>\,\.\-]+$/.test(email);
       },
       message: 'is invalid!'
     }
@@ -35,12 +34,8 @@ const User = new Schema({
     type: String,
     required: [true, 'must be entered'],
     trim: true,
-    minlength: [6, 'is too short'],
-    maxlength: [18, 'is too long'],
-    enum: {
-      values: ['444444', '333333'],
-      message: '{VALUE} is not supported'
-    },
+    minlength: [8, 'is too short'],
+    maxlength: [24, 'is too long'],
     validate: {
       validator: function(password) {
         return /^[0-9a-zA-Z\!\"\№\;\%\:\?\*\(\)\_\=\+\@\#\$\^\&\<\>\,\.\-]+$/.test(password);
@@ -51,7 +46,7 @@ const User = new Schema({
   role: {
     type: String,
     required: true,
-    default: Date.now,
+    default: 'User'
   },
   updated: {
     type: Date,

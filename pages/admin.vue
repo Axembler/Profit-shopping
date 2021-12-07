@@ -6,17 +6,17 @@
 				<span class="find_span">Find a user by his</span>
 				<div class="display-flex">
 					<div class="display-flex flex-column find_area">
-						<label class="admin_label" for="login">Login</label>
+						<label class="admin_label" for="email">Email</label>
 						<div class="display-flex">
-							<input v-model="form_find_login.login" id="login" type="text">
-							<button @click="find_user_login" class="loupe"><img src="~/static/images/loupe.png"></button>
+							<input v-model="form_find_email.email" id="email" type="text">
+							<button @click="find_user_email" class="loupe"><img src="~/static/images/loupe.png"></button>
 						</div>
 					</div>
 					<div class="display-flex flex-column">
-						<label class="admin_label" for="name">Nickname</label>
+						<label class="admin_label" for="nickname">Nickname</label>
 						<div class="display-flex">
-							<input v-model="form_find_name.name" id="name" type="text">
-							<button @click="find_user_name" class="loupe"><img src="~/static/images/loupe.png"></button>
+							<input v-model="form_find_nickname.nickname" id="nickname" type="text">
+							<button @click="find_user_nickname" class="loupe"><img src="~/static/images/loupe.png"></button>
 						</div>
 					</div>
 				</div>
@@ -25,12 +25,12 @@
 				<div class="display-flex flex-column align-center">
 					<span class="admin-func_span">Give out VIP</span>
 					<div class="display-flex flex-column padding-bottom">
-						<label for="vip_login">Login</label>
-						<input v-model="form_vip.login" id="vip_login" type="text">
+						<label for="vip_email">Email</label>
+						<input v-model="form_vip.email" id="vip_email" type="text">
 					</div>
 					<div class="display-flex flex-column padding-bottom">
-						<label for="vip_name">Nickname</label>
-						<input v-model="form_vip.name" id="vip_name" type="text">
+						<label for="vip_nickname">Nickname</label>
+						<input v-model="form_vip.nickname" id="vip_nickname" type="text">
 					</div>
 					<button @click="give_vip" class="perform">PERFORM</button>
 				</div>
@@ -38,23 +38,23 @@
 					<span class="admin-func_span">Update user data</span>
 					<div class="display-flex flex-column padding-bottom">
 						<label for="update-oldNickname">Old nickname</label>
-						<input v-model="form_update.oldName" id="update-oldNickname" type="text">
+						<input v-model="form_update.oldNickname" id="update-oldNickname" type="text">
 					</div>
 					<div class="display-flex flex-column padding-bottom">
 						<label for="update-newNickname">New nickname</label>
-						<input v-model="form_update.newName" id="update-newNickname" type="text">
+						<input v-model="form_update.newNickname" id="update-newNickname" type="text">
 					</div>
 					<button @click="update_user" class="perform">PERFORM</button>
 				</div>
 				<div class="display-flex flex-column align-center">
 					<span class="admin-func_span">Delete user</span>
 					<div class="display-flex flex-column padding-bottom">
-						<label for="delete_login">Login</label>
-						<input v-model="form_delete.login" id="delete_login" type="text">
+						<label for="delete_email">Email</label>
+						<input v-model="form_delete.email" id="delete_email" type="text">
 					</div>
 					<div class="display-flex flex-column padding-bottom">
 						<label for="delete_nickname">Nickname</label>
-						<input v-model="form_delete.name" id="delete_nickname" type="text">
+						<input v-model="form_delete.nickname" id="delete_nickname" type="text">
 					</div>
 					<button id="per" @click="delete_user" class="perform">PERFORM</button>
 				</div>
@@ -74,74 +74,74 @@ export default {
 		return {
 			message: [],
 			
-			form_find_login: {
-				login: ''
+			form_find_email: {
+				email: ''
 			},
 			form_find_name: {
-				name: ''
+				nickname: ''
 			},
 			form_delete: {
-				login: '',
-				name: ''
+				email: '',
+				nickname: ''
 			},
 			form_update: {
-				oldName: '',
-				newName: ''
+				oldNickname: '',
+				newNickname: ''
 			},
 			form_vip: {
-				login: '',
-				name: '',
+				email: '',
+				nickname: '',
 				oldRole: 'User',
 				newRole: 'VIP'
 			}
 		}
 	},
 	methods: {
-		find_user_login() {
-			if (this.form_find_login.login !== '') {
-				this.$axios.get('/api/user/getLogin', {params: this.form_find_login})
+		find_user_email() {
+			if (this.form_find_email.email !== '') {
+				this.$axios.get('/api/user/getEmail', {params: this.form_find_email})
 				.then((res) => this.message.push(res.data.message))
-				this.form_find_login = {
-					login: ''
+				this.form_find_email = {
+					email: ''
 				}
 			}
 		},
-		find_user_name() {
-			if (this.form_find_name.name !== '') {
-				this.$axios.get('/api/user/getName', {params: this.form_find_name})
+		find_user_nickname() {
+			if (this.form_find_nickname.nickname !== '') {
+				this.$axios.get('/api/user/getNickame', {params: this.form_find_nickname})
 				.then((res) => this.message.push(res.data.message))
-				this.form_find_name = {
-					name: ''
+				this.form_find_nickname = {
+					nickname: ''
 				}
 			}
 		},
 		update_user() {
-			if (this.form_update.oldName !== '' && this.form_update.newName !== '') {
+			if (this.form_update.oldNickname !== '' && this.form_update.newNickname !== '') {
 				this.$axios.put('/api/user/updateUser', this.form_update)
 				.then((res) => this.message.push(res.data.message))
 				this.form_update = {
-					oldName: '',
-					newName: ''
+					oldNickname: '',
+					newNickname: ''
 				}
 			}
 		},
 		delete_user() {
-			if (this.form_delete.login !== '' && this.form_delete.name !== '') {
+			if (this.form_delete.email !== '' && this.form_delete.nickname !== '') {
 				this.$axios.delete('/api/user/deleteUser', {params: this.form_delete})
 				.then((res) => this.message.push(res.data.message))
 				this.form_delete = {
-					login: '',
-					name: ''
+					email: '',
+					nickname: ''
 				}
 			}
 		},
 		give_vip() {
-			if (this.form_vip.login !== '' && this.form_vip.name !== '') {
+			if (this.form_vip.email !== '' && this.form_vip.nickname !== '') {
 				this.$axios.put('/api/user/vipUser', this.form_vip)
 				.then((res) => this.message.push(res.data.message))
 				this.form_vip = {
-					login: '',
-					name: ''
+					email: '',
+					nickname: ''
 				}
 			}
 		}

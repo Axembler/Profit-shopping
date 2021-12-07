@@ -1,63 +1,67 @@
 <template>
-    <div class="main">
-        <div class="form">
-            <label for="login">Login</label>
-            <input v-model="form_auth.login" id="login" type="text">
-            
-            <label for="password">Password</label>
-            <input v-model="form_auth.password" id="password" type="text">
-        </div>
-        <button @click="auth">Sign in</button>
-        <button @click="test" class="test">Test</button>
-        {{ user }}
-    </div>
+	<div class="main">
+		<div class="form">
+			<label for="email">Email</label>
+			<input v-model.trim="email" id="email" type="text">
+			<small v-if="$v.email.$dirty && !$v.email.required">Email is required</small>
+			<small v-else-if="$v.email.$dirty && !$v.email.email">Email should be of type exeample@hello.com</small>
+			
+			<label for="password">Password</label>
+			<input v-model.trim="password" id="password" type="password">
+			<small v-if="$v.password.$dirty && !$v.password.required">Password is required</small>
+			<small v-else-if="$v.password.$dirty && !$v.password.minLength">Password is too short</small>
+			<small v-else-if="$v.password.$dirty && !$v.password.maxLength">Password is too long</small>
+		</div>
+		<button @click="auth">Sign in</button>
+		{{ user }}
+	</div>
 </template>
 
 <script>
+import { required, email, minLength, maxLength } from 'vuelidate/lib/validators'
 import {mapGetters} from 'vuex'
 
 export default {
-    middleware: 'auth',
-    
-    data() {
-        return {
-            findAuth: null,
-
-            form_auth: {
-                login: '',
-                password: ''
-            }
-        }
-    },
-    computed: {
-        ...mapGetters({
-            user: 'auth/getUser'
-        })
-    },
-    methods: {
-        auth() {
-            this.findAuth = null
-            try {
-                if (this.form_auth.login !== '' && this.form_auth.password !== '') {
-                    this.$axios.get('/api/user/getAuth', {params: this.form_auth})
-                    .then((res) => {
-                        this.$store.commit('auth/setUser', res.data)
-                    })
-                    this.form_auth = {
-                        login: '',
-                        password: ''
-                    }
-                }
-            }
-            catch (e) {
-                console.log(e)
-            }
-
-        },
-        test() {
-            console.log('1')
-        }
-    }
+	middleware: 'auth',
+	
+	data() {
+		return {
+			email: '',
+			password: ''
+		}
+	},
+	computed: {
+		...mapGetters({
+			user: 'auth/getUser'
+		})
+	},
+	methods: {
+		auth() {
+			if (this.$v.$invalid) {
+				this.$v.$touch()
+				return
+			}
+			const form_auth = {
+				email: this.email,
+				password: this.password
+			}
+			this.$axios.get('/api/user/getAuth', {params: form_auth})
+			.then((res) => {
+				this.$store.commit('auth/setUser', res.data)
+			})
+		}
+	},
+	validations: {
+		email: {
+			required,
+			email
+		},
+		password: {
+			required,
+			minLength: minLength(8),
+			maxLength: maxLength(32)
+		}
+	}
 }
 </script>
 
@@ -93,7 +97,7 @@ button
 	text-align: center 
 	font-weight: 500 
 	letter-spacing: .1em 
-.test 
-	margin-top: 20px 
-
+small
+	width: 250px
+	color: $err
 </style>

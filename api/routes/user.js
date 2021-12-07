@@ -8,8 +8,8 @@ const User = require('../models/User');
 router.post('/user/post', async (req, res) => {
   try {
     const user = new User({
-      name: req.body.name,
-      login: req.body.login,
+      nickname: req.body.nickname,
+      email: req.body.email,
       password: req.body.password
     });
     user.save((err, user) => {
@@ -26,7 +26,7 @@ router.post('/user/post', async (req, res) => {
 // АВТОРИЗАЦИЯ
 router.get('/user/getAuth', async (req, res) => {
   const findAuth = await User.findOne({
-    login: req.query.login,
+    email: req.query.email,
     password: req.query.password
   })
   res.status(200).json(findAuth);
@@ -35,50 +35,50 @@ router.get('/user/getAuth', async (req, res) => {
 // ИЗМЕНЕНИЕ НИКНЕЙМА
 router.put('/user/updateUser', async (req, res) => {
   updateUser = await User.updateOne(
-  {name: req.body.oldName},
-  {name: req.body.newName}
+  {nickname: req.body.oldNickame},
+  {nickname: req.body.newNickame}
   );
   res.status(200).json({
     message: updateUser.modifiedCount === 1
-      ? `Nickname user ${req.query.oldName} has been changed to ${req.query.newName}!`
-      : `User with the name ${req.query.oldName} not found`
+      ? `Nickname user ${req.query.oldNickame} has been changed to ${req.query.newNickame}!`
+      : `User with the nickname ${req.query.oldNickame} not found`
   });
 });
 
 // УДАЛЕНИЕ ДАННЫХ
 router.delete('/user/deleteUser', async (req, res) => {
   const deleteUser = await User.deleteOne({
-    name: req.query.name,
-    login: req.query.login
+    nickname: req.query.nickname,
+    email: req.query.email
   })
   res.status(200).json({
     message: deleteUser.deletedCount === 1
-      ? `User with the name ${req.query.name} and the login ${req.query.login} deleted!`
-      : `User with the name ${req.query.name} and the login ${req.query.login} not found`
+      ? `User with the nickname ${req.query.nickname} and the login ${req.query.email} deleted!`
+      : `User with the nickname ${req.query.nickname} and the login ${req.query.email} not found`
   });
 });
 
 // ПОИСК ДНАНЫХ ПО ЛОГИНУ
-router.get('/user/getLogin', async (req, res) => {
-  const findUserLogin = await User.findOne({
-    login: req.query.login
+router.get('/user/getEmail', async (req, res) => {
+  const findUserEmail = await User.findOne({
+    email: req.query.email
   })
   res.status(200).json({
-    message: findUserLogin !== null
-      ? (findUserLogin)
-      : `User with the login ${req.query.login} not found`
+    message: findUserEmail !== null
+      ? (findUserEmail)
+      : `User with the email ${req.query.email} not found`
   });
 });
 
 // ПОИСК ДНАНЫХ ПО ИМЕНИ
-router.get('/user/getName', async (req, res) => {
-  const findUserName = await User.findOne({
-    name: req.query.name
+router.get('/user/getNickame', async (req, res) => {
+  const findUserNickame = await User.findOne({
+    nickname: req.query.nickname
   })
   res.status(200).json({
-    message: findUserName !== null
-      ? (findUserName)
-      : `User with name ${req.query.name} not found`
+    message: findUserNickame !== null
+      ? (findUserNickame)
+      : `User with name ${req.query.nickname} not found`
   });
 });
 

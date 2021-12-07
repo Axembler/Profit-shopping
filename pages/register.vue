@@ -1,90 +1,84 @@
 <template>
-    <div class="main">
-        <div class="form">
-            <p v-show="err_blank" class="err">All fields must be filled in</p>
-            <p v-show="err_repeat" class="err">Passwords must be match</p>
-            
-            <label v-if="err_name" class="err" for="name">Nickname {{ err_name }}</label>
-            <label v-else>Nickname</label>
-            <input v-model.trim="form_register.name" id="name" type="text">
+	<div class="main">
+		<div class="form">
+			<!-- NICKNAME -->
+			<label for="nickname">Nickname</label>
+			<input type="text" id="nickname" v-model.trim="nickname">
+			<small v-if="$v.nickname.$dirty && !$v.nickname.required">Nickname is required</small>
+			<small v-else-if="$v.nickname.$dirty && !$v.nickname.minLength">Nickname is too short</small>
+			<small v-else-if="$v.nickname.$dirty && !$v.nickname.maxLength">Nickname is too long</small>
 
-            <label v-if="err_login" class="err" for="login">Login {{ err_login }}</label>
-            <label v-else>Login</label>
-            <input v-model.trim="form_register.login" id="login" type="text">
+			<!-- EMAIL -->
+			<label for="email">Email</label>
+			<input type="text" id="email" v-model.trim="email">
+			<small v-if="$v.email.$dirty && !$v.email.required">Email is required</small>
+			<small v-else-if="$v.email.$dirty && !$v.email.email">Email should be of type exeample@hello.com</small>
 
-            <label v-if="err_password" class="err" for="password">Password {{ err_password }}</label>
-            <label v-else>Password</label>
-            <input v-model.trim="form_register.password" id="password" type="password">
+			<!-- PASSWORD -->
+			<label for="password">Password</label>
+			<input type="password" id="password" v-model.trim="password">
+			<small v-if="$v.password.$dirty && !$v.password.required">Password is required</small>
+			<small v-else-if="$v.password.$dirty && !$v.password.minLength">Password is too short</small>
+			<small v-else-if="$v.password.$dirty && !$v.password.maxLength">Password is too long</small>
 
-            <label for="repeat-password">Repeat password</label>
-            <input v-model.trim="form_register.repeatPassword" id="repeat-password">
-        </div>
-        <button @click="registration">Sign up</button>
-        <button @click="reg">Sign up</button>
-    </div>
+			<!-- REPEAT PASSWORD -->
+			<label for="repeat_password">Repeat password</label>
+			<input type="password" id="repeat_password" v-model.trim="$v.repeatPassword.$model">
+			<small v-if="$v.repeatPassword.$error">Passwords must match</small>
+		</div>
+		<button @click="reg">Sign up</button>
+	</div>
 </template>
 
 <script>
-import { required, email } from 'vuelidate/lib/validators'
+import { required, email, sameAs, minLength, maxLength } from 'vuelidate/lib/validators'
 
 export default {
-    data() {
-        return {
-            err_login: null,
-            err_name: null,
-            err_password: null,
-
-            err_repeat: false,
-            err_blank: false,
-
-            form_register: {
-                login: '',
-                password: '',
-                repeatPassword: '',
-                name: '',
-                role: ''
-            }
-        }
-    },
-    methods: {
-        registration(){
-            if (this.form_register.password == this.form_register.repeatPassword && this.form_register.password !== '') {
-                this.err_repeat = false
-                this.$axios.post('/api/user/post', this.form_register)
-                .then(() => {
-                    this.form_register = {
-                        login: '',
-                        password: '',
-                        repeatPassword: '',
-                        name: ''
-                    }
-                    this.err_login = null
-                    this.err_name = null
-                    this.err_password = null
-                })
-                .catch((err) => {
-                    const error = err.response.data.err.errors
-
-                    if (error.name) {this.err_name = error.name.message}
-                    else {this.err_name = null}
-
-					if (error.login) {this.err_login = error.login.message}
-                    else {this.err_login = null}
-
-					if (error.password) {this.err_password = error.password.message}
-                    else {this.err_password = null}
-                })
-            } else {
-                this.err_repeat = true
-            }
-        },
-        reg() {
-            if (this.$v.$invalid) {
-                this.$v.$touch()
-                return
-            }
-        }
-    }
+	data() {
+		return {
+			nickname: '',
+			email: '',
+			password: '',
+			repeatPassword: '',
+		}
+	},
+	methods: {
+		reg() {
+			if (this.$v.$invalid) {
+				this.$v.$touch()
+				return
+			}
+			const form_register = {
+				nickname: this.nickname,
+				email: this.email,
+				password: this.password
+			}
+			this.$axios.post('/api/user/post', form_register)
+			.catch((err) => {
+				const error = err.response.data.err.errors
+				console.log(error)
+			})
+		}
+	},
+	validations: {
+		email: {
+			required,
+			email
+		},
+		password: {
+			required,
+			minLength: minLength(8),
+			maxLength: maxLength(32)
+		},
+		repeatPassword: {
+			sameAsPassword: sameAs('password')
+		},
+		nickname: {
+			required,
+			minLength: minLength(4),
+			maxLength: maxLength(14)
+		}
+	}
 }
 </script>
 
@@ -98,9 +92,7 @@ export default {
 .form
 	display: grid
 	gap: 10px
-	grid-template-columns: repeat(1r, 1fr)
 	justify-content: center
-	width: 30%
 	padding-bottom: 50px
 input 
 	width: 250px
@@ -120,6 +112,7 @@ button
 	text-align: center
 	font-weight: 500
 	letter-spacing: .1em
-.err
+small
+	width: 250px
 	color: $err
 </style>
