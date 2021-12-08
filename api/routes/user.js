@@ -35,13 +35,13 @@ router.get('/user/getAuth', async (req, res) => {
 // ИЗМЕНЕНИЕ НИКНЕЙМА
 router.put('/user/updateUser', async (req, res) => {
   updateUser = await User.updateOne(
-  {nickname: req.body.oldNickame},
-  {nickname: req.body.newNickame}
+  {nickname: req.body.oldNickname},
+  {nickname: req.body.newNickname}
   );
   res.status(200).json({
     message: updateUser.modifiedCount === 1
-      ? `Nickname user ${req.query.oldNickame} has been changed to ${req.query.newNickame}!`
-      : `User with the nickname ${req.query.oldNickame} not found`
+      ? `Nickname user ${req.body.oldNickname} has been changed to ${req.body.newNickname}!`
+      : `User with the nickname ${req.body.oldNickname} not found`
   });
 });
 

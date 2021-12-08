@@ -7,7 +7,12 @@
 			<small v-else-if="$v.email.$dirty && !$v.email.email">Email should be of type exeample@hello.com</small>
 			
 			<label for="password">Password</label>
-			<input v-model.trim="password" id="password" type="password">
+			<div class="display-flex">
+				<input type="password" class="input_show" id="password" v-model.trim="password">
+				<button @click="show_password" class="show">
+					<img :src="`images/${this.password_eye}_eye.png`">
+				</button>
+			</div>
 			<small v-if="$v.password.$dirty && !$v.password.required">Password is required</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.minLength">Password is too short</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.maxLength">Password is too long</small>
@@ -27,7 +32,9 @@ export default {
 	data() {
 		return {
 			email: '',
-			password: ''
+			password: '',
+
+			password_eye: 'closed',
 		}
 	},
 	computed: {
@@ -49,7 +56,17 @@ export default {
 			.then((res) => {
 				this.$store.commit('auth/setUser', res.data)
 			})
-		}
+		},
+		show_password() {
+			if (password.type ==='password') {
+				password.type = 'text'
+				this.password_eye = 'opened'
+			}
+			else {
+				password.type = 'password'
+				this.password_eye = 'closed'
+			}
+		},
 	},
 	validations: {
 		email: {
@@ -79,6 +96,17 @@ export default {
 	justify-content: center 
 	width: 30% 
 	padding-bottom: 50px 
+.show
+	display: flex
+	justify-content: center
+	align-items: center
+	border: 0
+	width: 30px
+	height: 30px
+	img
+		width: 24px
+.input_show
+	width: 220px
 input 
 	width: 250px 
 	height: 30px 

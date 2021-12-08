@@ -31,7 +31,6 @@ header
 	justify-content: space-between
 	align-items: center
 	height: 12vh
-
 .logo
 	cursor: pointer
 	text-align: center
@@ -41,14 +40,12 @@ header
 	letter-spacing: 0.3em
 	padding-left: 5%
 	color: white
-
 .buttons
 	display: grid
 	gap: 20px
 	grid-template-columns: repeat(3, 1fr)
 	width: auto
 	margin-right: 5%
-
 .button
 	display: flex
 	align-items: center
@@ -60,14 +57,29 @@ header
 	text-align: center
 	font-weight: 500
 	letter-spacing: .07em
-
+	height: 42px
+	width: 136px
 .admin
 	background: rgba(235, 70, 70, 0.6)
-
 .button
 	> p
 		margin-right: 10px
-
 .auth-icon
 	width: 22px
+@media (max-width: 768px)
+	header
+		flex-direction: column
+		justify-content: flex-start
+	.logo
+		padding: 10px 0
+		font-size: 26px
+	.buttons
+		margin: 0
+	p
+		display: none
+@media (max-width: 490px)
+	.button
+		width: 42px
+	.logo
+		font-size: 18px
 </style>

@@ -2,19 +2,19 @@
 	<div class="main">
 		<span>ADMIN PANEL</span>
 		<div class="admin-form">
-			<div class="display-flex flex-column align-center">
+			<div class="admin-form_first display-flex flex-column align-center">
 				<span class="find_span">Find a user by his</span>
 				<div class="display-flex">
 					<div class="display-flex flex-column find_area">
 						<label class="admin_label" for="email">Email</label>
-						<div class="display-flex">
+						<div class="display-flex padding-bottom">
 							<input v-model="form_find_email.email" id="email" type="text">
 							<button @click="find_user_email" class="loupe"><img src="~/static/images/loupe.png"></button>
 						</div>
 					</div>
 					<div class="display-flex flex-column">
 						<label class="admin_label" for="nickname">Nickname</label>
-						<div class="display-flex">
+						<div class="display-flex padding-bottom">
 							<input v-model="form_find_nickname.nickname" id="nickname" type="text">
 							<button @click="find_user_nickname" class="loupe"><img src="~/static/images/loupe.png"></button>
 						</div>
@@ -77,7 +77,7 @@ export default {
 			form_find_email: {
 				email: ''
 			},
-			form_find_name: {
+			form_find_nickname: {
 				nickname: ''
 			},
 			form_delete: {
@@ -161,38 +161,30 @@ export default {
 		font-size: 28px 
 		letter-spacing: 0.15em 
 		text-align: center
-
 .admin-form 
 	display: flex
 	justify-content: center
 	background: rgba(255, 255, 255, 0.05)
 	padding: 36px
-
 .admin-func
 	display: grid
 	grid-template-columns: repeat(3, 1fr)
 	gap: 48px
 	padding-left: 50px
-
 .admin-func
 	label
 		padding-bottom: 7px
 		font-size: 14px
-
 .admin-func_span
 	padding-bottom: 28px
-
 .find_span
 	padding-bottom: 28px
 	font-size: 16px
-
 .find_area
 	padding-right: 60px
-
 .admin_label
 	padding-bottom: 7px
 	font-size: 14px
-
 .loupe
 	display: flex
 	justify-content: center
@@ -201,7 +193,6 @@ export default {
 	width: 30px
 	height: 30px
 	background: $red
-
 .perform
 	width: 120px
 	height: 30px
@@ -209,7 +200,6 @@ export default {
 	border: 0
 	font-size: 14px
 	font-weight: 500
-	
 .output 
 	display: flex 
 	flex-direction: column 
@@ -218,7 +208,6 @@ export default {
 	list-style: none 
 	padding: 0 
 	font-size: 14px
-
 .output-place
 	display: flex
 	flex-direction: column
@@ -237,7 +226,6 @@ export default {
 		margin-bottom: 20px
 		letter-spacing: .1em
 		opacity: 0.6
-
 input
 	width: 140px 
 	height: 30px 
@@ -245,5 +233,34 @@ input
 	border: 0 
 	border-bottom: 1px solid white 
 	background: rgba(255, 255, 255, .1) 
-	color: white 
+	color: white
+@media (max-width: 1120px)
+	.admin-form
+		flex-direction: column
+		width: 480px
+	.admin-form_first
+		margin-bottom: 50px
+		padding: 26px
+		background: #4444
+		& > div
+			flex-direction: column
+		.find_area
+			padding: 0
+	.admin-func
+		flex-direction: column
+		grid-template-columns: unset
+		padding: 0
+		& > div
+			background: #4444
+			padding: 16px
+	.output-place
+		width: 480px
+@media (max-width: 540px)
+	.main
+		& > span
+			font-size: 16px
+	.admin-form
+		width: 300px
+	.output-place
+		width: 300px
 </style>

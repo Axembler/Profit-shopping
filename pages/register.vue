@@ -16,14 +16,25 @@
 
 			<!-- PASSWORD -->
 			<label for="password">Password</label>
-			<input type="password" id="password" v-model.trim="password">
+			<div class="display-flex">
+				<input type="password" class="input_show" id="password" v-model.trim="password">
+				<button @click="show_password" class="show">
+					<img :src="`images/${this.password_eye}_eye.png`">
+				</button>
+			</div>
 			<small v-if="$v.password.$dirty && !$v.password.required">Password is required</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.minLength">Password is too short</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.maxLength">Password is too long</small>
 
 			<!-- REPEAT PASSWORD -->
 			<label for="repeat_password">Repeat password</label>
-			<input type="password" id="repeat_password" v-model.trim="$v.repeatPassword.$model">
+			<div class="display-flex">
+				<input type="password" class="input_show" id="repeat_password" v-model.trim="$v.repeatPassword.$model">
+				<button @click="show_repeat_password" class="show">
+					<img :src='`images/${this.repeat_password_eye}_eye.png`'>
+				</button>
+			</div>
+			<small v-if="$v.repeatPassword.$dirty && !$v.repeatPassword.required">Password is required</small>
 			<small v-if="$v.repeatPassword.$error">Passwords must match</small>
 		</div>
 		<button @click="reg">Sign up</button>
@@ -40,6 +51,9 @@ export default {
 			email: '',
 			password: '',
 			repeatPassword: '',
+
+			password_eye: 'closed',
+			repeat_password_eye: 'closed'
 		}
 	},
 	methods: {
@@ -58,6 +72,26 @@ export default {
 				const error = err.response.data.err.errors
 				console.log(error)
 			})
+		},
+		show_password() {
+			if (password.type ==='password') {
+				password.type = 'text'
+				this.password_eye = 'opened'
+			}
+			else {
+				password.type = 'password'
+				this.password_eye = 'closed'
+			}
+		},
+		show_repeat_password() {
+			if (repeat_password.type ==='password') {
+				repeat_password.type = 'text'
+				this.repeat_password_eye = 'opened'
+			}
+			else {
+				repeat_password.type = 'password'
+				this.repeat_password_eye = 'closed'
+			}
 		}
 	},
 	validations: {
@@ -71,6 +105,7 @@ export default {
 			maxLength: maxLength(32)
 		},
 		repeatPassword: {
+			required,
 			sameAsPassword: sameAs('password')
 		},
 		nickname: {
@@ -94,6 +129,18 @@ export default {
 	gap: 10px
 	justify-content: center
 	padding-bottom: 50px
+
+.show
+	display: flex
+	justify-content: center
+	align-items: center
+	border: 0
+	width: 30px
+	height: 30px
+	img
+		width: 24px
+.input_show
+	width: 220px
 input 
 	width: 250px
 	height: 30px
