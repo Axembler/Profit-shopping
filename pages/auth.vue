@@ -14,17 +14,25 @@
 				</button>
 			</div>
 			<small v-if="$v.password.$dirty && !$v.password.required">Password is required</small>
+			<small v-else-if="$v.password.$dirty && !$v.password.passwordRegex">
+				Password must consist of at least 8 characters,
+				must contain uppercase and lowercase letters and
+				at least one digit and one special symbol
+			</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.minLength">Password is too short</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.maxLength">Password is too long</small>
 		</div>
 		<button @click="auth">Sign in</button>
-		{{ user }}
+		<span v-if="user">Вы успешно авторизировались</span>
+		<!-- {{ user }} -->
 	</div>
 </template>
 
 <script>
-import { required, email, minLength, maxLength } from 'vuelidate/lib/validators'
+import { helpers, required, email, minLength, maxLength } from 'vuelidate/lib/validators'
 import {mapGetters} from 'vuex'
+
+const passwordRegex = helpers.regex('passwordRegex', /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*_])/g)
 
 export default {
 	middleware: 'auth',
@@ -75,6 +83,7 @@ export default {
 		},
 		password: {
 			required,
+			passwordRegex,
 			minLength: minLength(8),
 			maxLength: maxLength(32)
 		}

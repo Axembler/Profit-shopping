@@ -8,18 +8,19 @@
 					<div class="display-flex flex-column find_area">
 						<label class="admin_label" for="email">Email</label>
 						<div class="display-flex padding-bottom">
-							<input v-model="form_find_email.email" id="email" type="text">
+							<input v-model.trim="form_find_email.email" id="email" type="text">
 							<button @click="find_user_email" class="loupe"><img src="~/static/images/loupe.png"></button>
 						</div>
 					</div>
 					<div class="display-flex flex-column">
 						<label class="admin_label" for="nickname">Nickname</label>
 						<div class="display-flex padding-bottom">
-							<input v-model="form_find_nickname.nickname" id="nickname" type="text">
+							<input v-model.trim="form_find_nickname.nickname" id="nickname" type="text">
 							<button @click="find_user_nickname" class="loupe"><img src="~/static/images/loupe.png"></button>
 						</div>
 					</div>
 				</div>
+				<button @click="find_users" class="perform">FIND USERS</button>
 			</div>
 			<div class="admin-func">
 				<div class="display-flex flex-column align-center">
@@ -62,13 +63,64 @@
 		</div>
 		<div class="output-place">
 			<span>OUTPUT</span>
-			<p v-if="message.length"> {{ message }} </p>
-			<p v-else>Don't take me away :(</p>
+			<!-- <div v-if="message.length">
+				<ul v-for="item in message" :key="item.index">
+					<ul v-if="item.message.role">
+						<li>id: {{ item.message._id }}</li>
+						<li>nickname: {{ item.message.nickname }}</li>
+						<li>role: {{ item.message.role }}</li>
+						<li>email: {{ item.message.email }}</li>
+						<li>password: {{ item.message.password }}</li>
+						<li>updated: {{ item.message.updated }}</li>
+					</ul>
+					<div class="it-padding" v-for="it in item.message" :key="it.index">
+						<ul v-if="it.role">
+							<li>id: {{ it._id }}</li>
+							<li>nickname: {{ it.nickname }}</li>
+							<li>role: {{ it.role }}</li>
+							<li>email: {{ it.email }}</li>
+							<li>password: {{ it.password }}</li>
+							<li>updated: {{ it.updated }}</li>
+						</ul>
+					</div>
+					<span v-if="!item.message.role">{{ item.message }}</span>
+					<small class="item-date">{{ item.date }}</small>
+				</ul>
+			</div> -->
+			<div v-if="message.length">
+				<ul v-for="item in message" :key="item._id">
+
+					<ul v-if="item.message.role">
+						<li>id: {{ item.message._id }}</li>
+						<li>nickname: {{ item.message.nickname }}</li>
+						<li>role: {{ item.message.role }}</li>
+						<li>email: {{ item.message.email }}</li>
+						<li>password: {{ item.message.password }}</li>
+						<li>updated: {{ item.message.updated }}</li>
+					</ul>
+
+					<ul v-for="it in item.message" :key="it._id" v-if="it.role">
+						<li>id: {{ it._id }}</li>
+						<li>nickname: {{ it.nickname }}</li>
+						<li>role: {{ it.role }}</li>
+						<li>email: {{ it.email }}</li>
+						<li>password: {{ it.password }}</li>
+						<li>updated: {{ it.updated }}</li>
+					</ul>
+
+					<component :is="!item.message && !it.role">{{ item.message }}</component>
+					<!-- <span v-if="!item && !it">{{ item.message }}</span> -->
+
+					<small class="item-date">{{ item.date }}</small>
+				</ul>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import { required, email, minLength, maxLength, helpers } from 'vuelidate/lib/validators'
+
 export default {
 	data() {
 		return {
@@ -100,7 +152,7 @@ export default {
 		find_user_email() {
 			if (this.form_find_email.email !== '') {
 				this.$axios.get('/api/user/getEmail', {params: this.form_find_email})
-				.then((res) => this.message.push(res.data.message))
+				.then((res) => this.message.push(res.data))
 				this.form_find_email = {
 					email: ''
 				}
@@ -109,16 +161,20 @@ export default {
 		find_user_nickname() {
 			if (this.form_find_nickname.nickname !== '') {
 				this.$axios.get('/api/user/getNickame', {params: this.form_find_nickname})
-				.then((res) => this.message.push(res.data.message))
+				.then((res) => this.message.push(res.data))
 				this.form_find_nickname = {
 					nickname: ''
 				}
 			}
 		},
+		find_users() {
+			this.$axios.get('/api/user/getUsers')
+			.then((res) => this.message.push(res.data))
+		},
 		update_user() {
 			if (this.form_update.oldNickname !== '' && this.form_update.newNickname !== '') {
 				this.$axios.put('/api/user/updateUser', this.form_update)
-				.then((res) => this.message.push(res.data.message))
+				.then((res) => this.message.push(res.data))
 				this.form_update = {
 					oldNickname: '',
 					newNickname: ''
@@ -128,7 +184,7 @@ export default {
 		delete_user() {
 			if (this.form_delete.email !== '' && this.form_delete.nickname !== '') {
 				this.$axios.delete('/api/user/deleteUser', {params: this.form_delete})
-				.then((res) => this.message.push(res.data.message))
+				.then((res) => this.message.push(res.data))
 				this.form_delete = {
 					email: '',
 					nickname: ''
@@ -138,12 +194,30 @@ export default {
 		give_vip() {
 			if (this.form_vip.email !== '' && this.form_vip.nickname !== '') {
 				this.$axios.put('/api/user/vipUser', this.form_vip)
-				.then((res) => this.message.push(res.data.message))
+				.then((res) => this.message.push(res.data))
 				this.form_vip = {
 					email: '',
 					nickname: ''
 				}
 			}
+		}
+	},
+	validations: {
+		email: {
+			required,
+			email
+		},
+		password: {
+			required,
+			passwordRegex,
+			minLength: minLength(8),
+			maxLength: maxLength(32)
+		},
+		nickname: {
+			required,
+			nicknameRegex,
+			minLength: minLength(4),
+			maxLength: maxLength(14)
 		}
 	}
 }
@@ -211,7 +285,7 @@ export default {
 .output-place
 	display: flex
 	flex-direction: column
-	align-items: center
+	align-items: flex-start
 	width: 50vw
 	height: 28vh 
 	overflow: auto
@@ -225,7 +299,12 @@ export default {
 		width: 100%
 		margin-bottom: 20px
 		letter-spacing: .1em
-		opacity: 0.6
+		opacity: 0.8
+.item-date
+	opacity: 0.5
+	font-size: 12px
+.it-padding
+	padding-bottom: 16px
 input
 	width: 140px 
 	height: 30px 
@@ -234,6 +313,10 @@ input
 	border-bottom: 1px solid white 
 	background: rgba(255, 255, 255, .1) 
 	color: white
+ul, li
+	text-align: left
+	list-style-type: none
+	padding: 0
 @media (max-width: 1120px)
 	.admin-form
 		flex-direction: column

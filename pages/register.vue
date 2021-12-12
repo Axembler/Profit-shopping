@@ -5,6 +5,7 @@
 			<label for="nickname">Nickname</label>
 			<input type="text" id="nickname" v-model.trim="nickname">
 			<small v-if="$v.nickname.$dirty && !$v.nickname.required">Nickname is required</small>
+			<small v-else-if="$v.nickname.$dirty && !$v.nickname.nicknameRegex">Nickname can contain only letters, numbers and underscores</small>
 			<small v-else-if="$v.nickname.$dirty && !$v.nickname.minLength">Nickname is too short</small>
 			<small v-else-if="$v.nickname.$dirty && !$v.nickname.maxLength">Nickname is too long</small>
 
@@ -12,7 +13,7 @@
 			<label for="email">Email</label>
 			<input type="text" id="email" v-model.trim="email">
 			<small v-if="$v.email.$dirty && !$v.email.required">Email is required</small>
-			<small v-else-if="$v.email.$dirty && !$v.email.email">Email should be of type exeample@hello.com</small>
+			<small v-else-if="$v.email.$dirty && !$v.email.email">Email should be of type hello@exeample.com</small>
 
 			<!-- PASSWORD -->
 			<label for="password">Password</label>
@@ -23,6 +24,11 @@
 				</button>
 			</div>
 			<small v-if="$v.password.$dirty && !$v.password.required">Password is required</small>
+			<small v-else-if="$v.password.$dirty && !$v.password.passwordRegex">
+				Password must consist of at least 8 characters,
+				must contain uppercase and lowercase letters and
+				at least one digit and one special symbol
+			</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.minLength">Password is too short</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.maxLength">Password is too long</small>
 
@@ -42,7 +48,10 @@
 </template>
 
 <script>
-import { required, email, sameAs, minLength, maxLength } from 'vuelidate/lib/validators'
+import { required, email, sameAs, minLength, maxLength, helpers } from 'vuelidate/lib/validators'
+
+const nicknameRegex = helpers.regex('nicknameRegex', /^[0-9a-zA-Z\_]+$/)
+const passwordRegex = helpers.regex('passwordRegex', /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*_])/g)
 
 export default {
 	data() {
@@ -101,6 +110,7 @@ export default {
 		},
 		password: {
 			required,
+			passwordRegex,
 			minLength: minLength(8),
 			maxLength: maxLength(32)
 		},
@@ -110,6 +120,7 @@ export default {
 		},
 		nickname: {
 			required,
+			nicknameRegex,
 			minLength: minLength(4),
 			maxLength: maxLength(14)
 		}
