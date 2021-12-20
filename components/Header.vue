@@ -2,26 +2,27 @@
 	  <header>
 			<NuxtLink exact active-class="active" to="/" class="logo">PROFIT SHOPPING</NuxtLink>
 			<div class="buttons">
-				  <NuxtLink exact active-class="active" to="/auth" class="button"><p>Sign in</p><img src="~/static/images/sign_in.png" class="auth-icon"></NuxtLink>
-				  <NuxtLink exact active-class="active" to="/register" class="button"><p>Sign up</p><img src="~/static/images/sign_up.png" class="auth-icon"></NuxtLink>
-				  <NuxtLink exact active-class="active" to="/admin" class="button admin"><p>Admin</p><img src="~/static/images/admin.png" class="auth-icon"></NuxtLink>
+				<button class="button"><p>Logout</p><img src="~/static/images/logout.png" class="auth-icon"></button>
+				<NuxtLink exact active-class="active" to="/auth" class="button"><p>Sign in</p><img src="~/static/images/sign_in.png" class="auth-icon"></NuxtLink>
+				<NuxtLink exact active-class="active" to="/register" class="button"><p>Sign up</p><img src="~/static/images/sign_up.png" class="auth-icon"></NuxtLink>
+				<NuxtLink exact active-class="active" to="/admin" class="button admin"><p>Admin</p><img src="~/static/images/admin.png" class="auth-icon"></NuxtLink>
 			</div>
 	  </header>
 </template>
 
 <script>
 export default {
-	  methods: {
-			home() {
-				  this.$router.push('/')
-			},
-			sign_up() {
-				  this.$router.push('/register')
-			},
-			sign_in() {
-				  this.$router.push('/auth')
-			}
-	  }
+	methods: {
+		home() {
+			this.$router.push('/')
+		},
+		sign_up() {
+			this.$router.push('/register')
+		},
+		sign_in() {
+			this.$router.push('/auth')
+		}
+	}
 }
 </script>
 
@@ -43,7 +44,7 @@ header
 .buttons
 	display: grid
 	gap: 20px
-	grid-template-columns: repeat(3, 1fr)
+	grid-template-columns: repeat(4, 1fr)
 	width: auto
 	margin-right: 5%
 .button
@@ -51,6 +52,7 @@ header
 	align-items: center
 	justify-content: center
 	padding: 10px
+	border: 0
 	background: rgba(0, 220, 130, 0.7)
 	color: #1D1128
 	font-size: 18px

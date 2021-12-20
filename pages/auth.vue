@@ -1,6 +1,8 @@
 <template>
 	<div class="main">
 		<div class="form">
+			<small v-if="user">You have successfully logged in!</small>
+
 			<label for="email">Email</label>
 			<input v-model.trim="email" id="email" type="text">
 			<small v-if="$v.email.$dirty && !$v.email.required">Email is required</small>
@@ -23,7 +25,6 @@
 			<small v-else-if="$v.password.$dirty && !$v.password.maxLength">Password is too long</small>
 		</div>
 		<button @click="auth">Sign in</button>
-		<span v-if="user">Вы успешно авторизировались</span>
 		<!-- {{ user }} -->
 	</div>
 </template>
