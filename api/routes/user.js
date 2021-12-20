@@ -6,20 +6,39 @@ const User = require('../models/User');
 
 // РЕГИСТРАЦИЯ
 router.post('/user/post', async (req, res) => {
-  try {
-    const user = new User({
-      nickname: req.body.nickname,
-      email: req.body.email,
-      password: req.body.password
-    });
-    user.save((err, user) => {
-      if (err) {
-        res.status(500).json({ err });
-        return;
-      } else res.status(200).json({ user });
-    });
-  } catch (err) {
-    res.status(500).json({ error: err });
+  const findUserRegNickname = await User.findOne({
+    nickname: req.body.nickname
+  })
+  const findUserRegEmail = await User.findOne({
+    email: req.body.email
+  })
+  if (findUserRegNickname == null && findUserRegEmail == null) { 
+    try {
+      const user = new User({
+        nickname: req.body.nickname,
+        email: req.body.email,
+        password: req.body.password
+      });
+      user.save((err, user) => {
+        if (err) {
+          res.status(500).json({ err });
+          return;
+        } else res.status(200).json({ user });
+      });
+    } catch (err) {
+      res.status(500).json({ error: err });
+    }
+  }
+  else {
+    if (findUserRegNickname && findUserRegEmail) {
+      res.status(200).json({ error: 'User with this email and nickname already exist' });
+    }
+    else if (findUserRegNickname) {
+      res.status(200).json({ error: 'User with this nickname already exist' });
+    }
+    else if (findUserRegEmail) {
+      res.status(200).json({ error: 'User with this email already exist' });
+    }
   }
 });
 
@@ -95,7 +114,9 @@ router.get('/user/getUsers', async (req, res) => {
   const date = new Date(Date.now())
   const findUsers = await User.find()
   res.status(200).json({
-    message: findUsers,
+    message: findUsers.length
+      ? (findUsers)
+      : 'Users not found',
     date: date.toLocaleString()
   });
 });
@@ -104,8 +125,8 @@ router.get('/user/getUsers', async (req, res) => {
 router.put('/user/vipUser', async (req, res) => {
   const date = new Date(Date.now())
   const vipUser = await User.updateOne(
-  {role: req.body.oldRole},
-  {role: req.body.newRole}
+    {nickname: req.body.nickname},
+    {role: "VIP"}
   );
   res.status(200).json({
     message: vipUser.modifiedCount === 1

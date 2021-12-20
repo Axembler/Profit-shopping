@@ -11,5 +11,5 @@ export const mutations = {
 export const getters = {
     getUser (state) {
         return state.currentUser
-    },
+    }
 }

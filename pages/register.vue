@@ -1,6 +1,7 @@
 <template>
 	<div class="main">
 		<div class="form">
+			<small>{{ existError }}</small>
 			<!-- NICKNAME -->
 			<label for="nickname">Nickname</label>
 			<input type="text" id="nickname" v-model.trim="nickname">
@@ -8,13 +9,11 @@
 			<small v-else-if="$v.nickname.$dirty && !$v.nickname.nicknameRegex">Nickname can contain only letters, numbers and underscores</small>
 			<small v-else-if="$v.nickname.$dirty && !$v.nickname.minLength">Nickname is too short</small>
 			<small v-else-if="$v.nickname.$dirty && !$v.nickname.maxLength">Nickname is too long</small>
-
 			<!-- EMAIL -->
 			<label for="email">Email</label>
 			<input type="text" id="email" v-model.trim="email">
 			<small v-if="$v.email.$dirty && !$v.email.required">Email is required</small>
 			<small v-else-if="$v.email.$dirty && !$v.email.email">Email should be of type hello@exeample.com</small>
-
 			<!-- PASSWORD -->
 			<label for="password">Password</label>
 			<div class="display-flex">
@@ -31,7 +30,6 @@
 			</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.minLength">Password is too short</small>
 			<small v-else-if="$v.password.$dirty && !$v.password.maxLength">Password is too long</small>
-
 			<!-- REPEAT PASSWORD -->
 			<label for="repeat_password">Repeat password</label>
 			<div class="display-flex">
@@ -51,11 +49,13 @@
 import { required, email, sameAs, minLength, maxLength, helpers } from 'vuelidate/lib/validators'
 
 const nicknameRegex = helpers.regex('nicknameRegex', /^[0-9a-zA-Z\_]+$/)
-const passwordRegex = helpers.regex('passwordRegex', /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*_])/g)
+const passwordRegex = helpers.regex('passwordRegex', /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*_-])/g)
 
 export default {
 	data() {
 		return {
+			existError: '',
+
 			nickname: '',
 			email: '',
 			password: '',
@@ -77,6 +77,7 @@ export default {
 				password: this.password
 			}
 			this.$axios.post('/api/user/post', form_register)
+			.then((res) => this.existError = res.data.error)
 			.catch((err) => {
 				const error = err.response.data.err.errors
 				console.log(error)

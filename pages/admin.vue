@@ -26,12 +26,8 @@
 				<div class="display-flex flex-column align-center">
 					<span class="admin-func_span">Give out VIP</span>
 					<div class="display-flex flex-column padding-bottom">
-						<label for="vip_email">Email</label>
-						<input v-model="form_vip.email" id="vip_email" type="text">
-					</div>
-					<div class="display-flex flex-column padding-bottom">
 						<label for="vip_nickname">Nickname</label>
-						<input v-model="form_vip.nickname" id="vip_nickname" type="text">
+						<input v-model.trim="form_vip.nickname" id="vip_nickname" type="text">
 					</div>
 					<button @click="give_vip" class="perform">PERFORM</button>
 				</div>
@@ -39,11 +35,11 @@
 					<span class="admin-func_span">Update user data</span>
 					<div class="display-flex flex-column padding-bottom">
 						<label for="update-oldNickname">Old nickname</label>
-						<input v-model="form_update.oldNickname" id="update-oldNickname" type="text">
+						<input v-model.trim="form_update.oldNickname" id="update-oldNickname" type="text">
 					</div>
 					<div class="display-flex flex-column padding-bottom">
 						<label for="update-newNickname">New nickname</label>
-						<input v-model="form_update.newNickname" id="update-newNickname" type="text">
+						<input v-model.trim="form_update.newNickname" id="update-newNickname" type="text">
 					</div>
 					<button @click="update_user" class="perform">PERFORM</button>
 				</div>
@@ -51,11 +47,11 @@
 					<span class="admin-func_span">Delete user</span>
 					<div class="display-flex flex-column padding-bottom">
 						<label for="delete_email">Email</label>
-						<input v-model="form_delete.email" id="delete_email" type="text">
+						<input v-model.trim="form_delete.email" id="delete_email" type="text">
 					</div>
 					<div class="display-flex flex-column padding-bottom">
 						<label for="delete_nickname">Nickname</label>
-						<input v-model="form_delete.nickname" id="delete_nickname" type="text">
+						<input v-model.trim="form_delete.nickname" id="delete_nickname" type="text">
 					</div>
 					<button id="per" @click="delete_user" class="perform">PERFORM</button>
 				</div>
@@ -63,7 +59,7 @@
 		</div>
 		<div class="output-place">
 			<span>OUTPUT</span>
-			<!-- <div v-if="message.length">
+			<div v-if="message.length">
 				<ul v-for="item in message" :key="item.index">
 					<ul v-if="item.message.role">
 						<li>id: {{ item.message._id }}</li>
@@ -73,44 +69,7 @@
 						<li>password: {{ item.message.password }}</li>
 						<li>updated: {{ item.message.updated }}</li>
 					</ul>
-					<div class="it-padding" v-for="it in item.message" :key="it.index">
-						<ul v-if="it.role">
-							<li>id: {{ it._id }}</li>
-							<li>nickname: {{ it.nickname }}</li>
-							<li>role: {{ it.role }}</li>
-							<li>email: {{ it.email }}</li>
-							<li>password: {{ it.password }}</li>
-							<li>updated: {{ it.updated }}</li>
-						</ul>
-					</div>
-					<span v-if="!item.message.role">{{ item.message }}</span>
-					<small class="item-date">{{ item.date }}</small>
-				</ul>
-			</div> -->
-			<div v-if="message.length">
-				<ul v-for="item in message" :key="item._id">
-
-					<ul v-if="item.message.role">
-						<li>id: {{ item.message._id }}</li>
-						<li>nickname: {{ item.message.nickname }}</li>
-						<li>role: {{ item.message.role }}</li>
-						<li>email: {{ item.message.email }}</li>
-						<li>password: {{ item.message.password }}</li>
-						<li>updated: {{ item.message.updated }}</li>
-					</ul>
-
-					<ul v-for="it in item.message" :key="it._id" v-if="it.role">
-						<li>id: {{ it._id }}</li>
-						<li>nickname: {{ it.nickname }}</li>
-						<li>role: {{ it.role }}</li>
-						<li>email: {{ it.email }}</li>
-						<li>password: {{ it.password }}</li>
-						<li>updated: {{ it.updated }}</li>
-					</ul>
-
-					<component :is="!item.message && !it.role">{{ item.message }}</component>
-					<!-- <span v-if="!item && !it">{{ item.message }}</span> -->
-
+					<span v-else>{{ item.message }}</span>
 					<small class="item-date">{{ item.date }}</small>
 				</ul>
 			</div>
@@ -119,8 +78,6 @@
 </template>
 
 <script>
-import { required, email, minLength, maxLength, helpers } from 'vuelidate/lib/validators'
-
 export default {
 	data() {
 		return {
@@ -141,10 +98,7 @@ export default {
 				newNickname: ''
 			},
 			form_vip: {
-				email: '',
-				nickname: '',
-				oldRole: 'User',
-				newRole: 'VIP'
+				nickname: ''
 			}
 		}
 	},
@@ -192,32 +146,13 @@ export default {
 			}
 		},
 		give_vip() {
-			if (this.form_vip.email !== '' && this.form_vip.nickname !== '') {
+			if (this.form_vip.nickname !== '') {
 				this.$axios.put('/api/user/vipUser', this.form_vip)
 				.then((res) => this.message.push(res.data))
 				this.form_vip = {
-					email: '',
 					nickname: ''
 				}
 			}
-		}
-	},
-	validations: {
-		email: {
-			required,
-			email
-		},
-		password: {
-			required,
-			passwordRegex,
-			minLength: minLength(8),
-			maxLength: maxLength(32)
-		},
-		nickname: {
-			required,
-			nicknameRegex,
-			minLength: minLength(4),
-			maxLength: maxLength(14)
 		}
 	}
 }
