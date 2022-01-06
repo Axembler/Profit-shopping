@@ -1,36 +1,41 @@
 <template>
 	<div class="main-index">
-		<div :class="['top-index', {'item-fourth': items.length !== 2}]">
-			<div class="item" v-for="(item, index) in items" :key="item.id">
-				<span class="item-label">{{index + 1}}</span>
-				<div class="amounts">
-					<div class="amount-padding">
-						<label>Volume</label>
-						<input v-model="item.volume" placeholder="liters" min="0.1" step="0.1" type="number" required />
-					</div>
-					<div>
-						<label>Price</label>
-						<input v-model="item.price" placeholder="rubles" min="1" step="5" type="number" required />
-					</div>
-				</div>
-				<img class="remove-button" src="~/static/images/close.png" @click="remove(index), division()" v-if="items.length > 2">
-			</div>
-			<button class="add" @click="add()" v-if="items.length < 4">ADD</button>
-		</div>
-		<div class="bottom-index">
-			<button class="calc-button" @click="division()">CALCULATE</button>
-			<label class="button-label-first">profit</label>
+		<div>
 			<div :class="['top-index', {'item-fourth': items.length !== 2}]">
-				<label :class="['button-label-second', {'colorRed': profit === 0},
-				{'colorLightGreen': profit > 0 && profit < 25},
-				{'colorGreen': profit >= 25},
-				{'colorDarkGreen': profit >= 50},
-				{'colorViolet': profit >= 90}]"
-				v-for="(profit, index) in profits" :key="index">
-					{{profits[index]}}%
-					<span class="colorRed" v-if="profit === 0">*</span>
-				</label>
+				<div class="item" v-for="(item, index) in items" :key="item.id">
+					<span class="item-label">{{index + 1}}</span>
+					<div class="amounts">
+						<div class="amount-padding">
+							<label>Volume</label>
+							<input v-model="item.volume" placeholder="liters" min="0.1" step="0.1" type="number" required />
+						</div>
+						<div>
+							<label>Price</label>
+							<input v-model="item.price" placeholder="rubles" min="1" step="5" type="number" required />
+						</div>
+					</div>
+					<img class="remove-button" src="~/static/images/close.svg" @click="remove(index), division()" v-if="items.length > 2">
+				</div>
+				<button class="add" @click="add()" v-if="items.length < 4">ADD</button>
 			</div>
+			<div class="botton-index">
+				<button class="calc-button" @click="division()">CALCULATE</button>
+				<label class="button-label-first" v-if="profits.length">profit</label>
+				<div :class="['top-index', {'item-fourth': items.length !== 2}]">
+					<label :class="['button-label-second', {'colorRed': profit === 0},
+					{'colorLightGreen': profit > 0 && profit < 25},
+					{'colorGreen': profit >= 25},
+					{'colorDarkGreen': profit >= 50},
+					{'colorViolet': profit >= 90}]"
+					v-for="(profit, index) in profits" :key="index">
+						{{profits[index]}}%
+						<span class="colorRed" v-if="profit === 0">*</span>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="buttom-index">
+			* the calculation of benefit is made relative to the most unprofitable item
 		</div>
 	</div>
 </template>
@@ -108,6 +113,7 @@ export default {
 .main-index
 	display: flex
 	flex-direction: column
+	justify-content: space-between
 	min-height: calc(100vh - 8vh - 12vh)
 .top-index
 	display: grid
@@ -169,11 +175,12 @@ input
 .remove-button
 	display: flex
 	position: absolute
-	top: 20px
-	right: 20px
+	top: 0
+	right: 0
+	padding: 12px
+	border-left: 1px solid #5a5a5a
+	border-bottom: 1px solid #5a5a5a
 	cursor: pointer
-	opacity: 0.55
-	width: 36px
 .calc-button
 	width: 250px
 	height: 60px
@@ -200,15 +207,15 @@ input
 .colorViolet
 	color: #9900FF
 	text-shadow: 0 0 50px #9900FF
-.bottom-index
+.botton-index
 	display: flex
-	flex-direction: column 
-	height: 30% 
-	padding-top: 10px 
-	width: 100% 
-	align-items: center 
-	& > button 
-		margin-top: 15px 
+	flex-direction: column
+	height: 30%
+	padding-top: 10px
+	width: 100%
+	align-items: center
+	& > button
+		margin-top: 15px
 		margin-bottom: 40px
 .button-label-first
 	font-size: 24px
@@ -223,6 +230,10 @@ input
 	letter-spacing: .1em
 	font-family: Vidaloka
 	font-size: 100px
+.buttom-index
+	display: flex
+	justify-content: center
+	color: #a5a5a5
 @media (max-width: 768px)
 	.top-index
 		grid-template-columns: unset

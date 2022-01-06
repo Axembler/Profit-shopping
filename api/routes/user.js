@@ -110,16 +110,16 @@ router.get('/user/getNickame', async (req, res) => {
 });
 
 // ПОИСК ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
-router.get('/user/getUsers', async (req, res) => {
-  const date = new Date(Date.now())
-  const findUsers = await User.find()
-  res.status(200).json({
-    message: findUsers.length
-      ? (findUsers)
-      : 'Users not found',
-    date: date.toLocaleString()
-  });
-});
+// router.get('/user/getUsers', async (req, res) => {
+//   const date = new Date(Date.now())
+//   const findUsers = await User.find()
+//   res.status(200).json({
+//     message: findUsers.length
+//       ? (findUsers)
+//       : 'Users not found',
+//     date: date.toLocaleString()
+//   });
+// });
 
 // ВЫДАЧА ВИП
 router.put('/user/vipUser', async (req, res) => {

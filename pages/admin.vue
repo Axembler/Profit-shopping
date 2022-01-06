@@ -20,7 +20,7 @@
 						</div>
 					</div>
 				</div>
-				<button @click="find_users" class="perform">FIND USERS</button>
+				<!-- <button @click="find_users" class="perform">FIND USERS</button> -->
 			</div>
 			<div class="admin-func">
 				<div class="display-flex flex-column align-center">
@@ -121,10 +121,10 @@ export default {
 				}
 			}
 		},
-		find_users() {
-			this.$axios.get('/api/user/getUsers')
-			.then((res) => this.message.push(res.data))
-		},
+		// find_users() {
+		// 	this.$axios.get('/api/user/getUsers')
+		// 	.then((res) => this.message.push(res.data))
+		// },
 		update_user() {
 			if (this.form_update.oldNickname !== '' && this.form_update.newNickname !== '') {
 				this.$axios.put('/api/user/updateUser', this.form_update)

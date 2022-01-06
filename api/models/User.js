@@ -38,7 +38,7 @@ const User = new Schema({
     maxlength: [24, 'is too long'],
     validate: {
       validator: function(password) {
-        return /^[0-9a-zA-Z\!\"\№\;\%\:\?\*\(\)\_\=\+\@\#\$\^\&\<\>\,\.\-]+$/.test(password);
+        return /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*_-])/g.test(password);
       },
       message: 'is invalid!'
     }

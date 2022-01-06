@@ -12,17 +12,6 @@
 
 <script>
 export default {
-	methods: {
-		home() {
-			this.$router.push('/')
-		},
-		sign_up() {
-			this.$router.push('/register')
-		},
-		sign_in() {
-			this.$router.push('/auth')
-		}
-	}
 }
 </script>
 
