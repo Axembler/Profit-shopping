@@ -25,6 +25,7 @@
 			<small v-else-if="$v.password.$dirty && !$v.password.maxLength">Password is too long</small>
 		</div>
 		<button @click="auth">Sign in</button>
+		<!-- <button @click="login">Log in</button> -->
 		<!-- {{ user }} -->
 	</div>
 </template>
@@ -46,12 +47,19 @@ export default {
 			password_eye: 'closed',
 		}
 	},
-	computed: {
-		...mapGetters({
-			user: 'auth/getUser'
-		})
-	},
+    computed: {
+        ...mapGetters({
+            user: 'auth/getUser'
+        })
+    },
 	methods: {
+		login() {
+			let email = this.email 
+			let password = this.password
+			this.$store.dispatch('login', { email, password })
+			.then(() => this.$router.push('/'))
+			.catch(err => console.log(err))
+		},
 		auth() {
 			if (this.$v.$invalid) {
 				this.$v.$touch()

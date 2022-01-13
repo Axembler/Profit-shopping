@@ -42,6 +42,7 @@
 			<small v-if="$v.repeatPassword.$error">Passwords must match</small>
 		</div>
 		<button @click="reg">Sign up</button>
+		<!-- <button @click="register">Sign up</button> -->
 	</div>
 </template>
 
@@ -60,12 +61,24 @@ export default {
 			email: '',
 			password: '',
 			repeatPassword: '',
+			admin: '',
 
 			password_eye: 'closed',
 			repeat_password_eye: 'closed'
 		}
 	},
 	methods: {
+		register() {
+			let data = {
+				name: this.name,
+				email: this.email,
+				password: this.password,
+				admin: this.admin
+			}
+			this.$store.dispatch('register', data)
+			.then(() => this.$router.push('/'))
+			.catch(err => console.log(err))
+		},
 		reg() {
 			if (this.$v.$invalid) {
 				this.$v.$touch()
